@@ -1,0 +1,946 @@
+{
+  "common": {
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "continue": "Continuar",
+    "finish": "Finalizar",
+    "close": "Cerrar",
+    "search": "Buscar",
+    "loading": "Cargando...",
+    "processing": "Procesando...",
+    "required": "Obligatorio",
+    "optional": "Opcional",
+    "of": "de",
+    "clear": "Borrar",
+    "open": "Abrir",
+    "breadcrumb": "Breadcrumb"
+  },
+  "menu": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "collection": "Recolección",
+    "firstCollection": "Primera Recolección",
+    "recollection": "Recolección nuevamente",
+    "administrative": "Administrativo",
+    "users": "Usuarios",
+    "system": "Sistema",
+    "sync": "Sincronización",
+    "settings": "Configuraciones",
+    "logout": "Salir",
+    "config": "Config"
+  },
+  "app": {
+    "title": "Sistema de recolección biométrica neonatal",
+    "subtitle": "Registro de recolecciones y gestión",
+    "logoAlt": "Logo del Grupo de Investigación"
+  },
+  "login": {
+    "title": "Recolección Biométrica",
+    "subtitle": "Sistema de cribado neonatal",
+    "logoAlt": "Logo del Sistema de Recolección Biométrica Neonatal",
+    "aria": {
+      "form": "Formulario de inicio de sesión"
+    },
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "••••••••",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "forgotPassword": "¿Olvidó su contraseña?",
+    "loginButton": "Iniciar sesión",
+    "loggingIn": "Ingresando...",
+    "offlineHint": "Modo sin conexión disponible después del primer inicio de sesión",
+    "testAccessTitle": "Accesos de prueba",
+    "testAccessDescription": "Mientras no hay base de datos, use los accesos abajo:",
+    "testAccessAdmin": "Admin",
+    "testAccessAdminCreds": "admin / admin123",
+    "testAccessCollector": "Recolector",
+    "testAccessCollectorCreds": "coletor / coletor123",
+    "testAccessNote": "También acepta email: admin@local.test o coletor@local.test.",
+    "languagePlaceholder": "Idioma",
+    "successTitle": "Inicio de sesión correcto",
+    "successDescription": "Bienvenido(a), {{name}}!",
+    "errors": {
+      "missingFieldsTitle": "Complete todos los campos",
+      "missingFieldsDescription": "Ingrese usuario y contraseña.",
+      "invalidTitle": "Error de inicio de sesión",
+      "invalidDescription": "Usuario o contraseña inválidos.",
+      "connection": "Fallo de conexión. Inténtelo de nuevo."
+    }
+  },
+  "dashboard": {
+    "title": "Iniciar Recolección",
+    "description": "Elija el procedimiento que desea realizar.",
+    "firstCardImageAlt": "Bebé pre-recolección",
+    "firstCardDescription": "Inicie la recolección de un recién nacido que aún no está registrado en el sistema.",
+    "firstCardAction": "Iniciar Recolección",
+    "recollectionCardImageAlt": "Bebé post-recolección",
+    "recollectionCardDescription": "Rehacer la recolección de un bebé ya registrado o completar una recolección.",
+    "recollectionCardAction": "Iniciar Recolecta"
+  },
+  "notFound": {
+    "title": "¡Ups! Página no encontrada",
+    "backHome": "Volver al inicio"
+  },
+  "terms": {
+    "title": "Término de Confidencialidad",
+    "version": "Versión 1.0 - Sistema de Recolección Biométrica Neonatal",
+    "acceptLabel": "Acepto el término de CONFIDENCIALIDAD",
+    "acceptButton": "Aceptar y Continuar",
+    "acceptedTitle": "Término aceptado",
+    "acceptedDescription": "¡Bienvenido(a) al sistema!",
+    "errors": {
+      "notAcceptedTitle": "Término no aceptado",
+      "notAcceptedDescription": "Debe aceptar los términos para continuar."
+    },
+    "sections": {
+      "object": {
+        "title": "1. OBJETO",
+        "body": "El presente Término establece las condiciones de confidencialidad para el acceso y uso del Sistema de Recolección Biométrica Neonatal."
+      },
+      "confidentiality": {
+        "title": "2. CONFIDENCIALIDAD",
+        "body": "El usuario se compromete a mantener absoluto secreto sobre toda la información obtenida a través del sistema, especialmente datos personales y biométricos de recién nacidos y responsables."
+      },
+      "responsibilities": {
+        "title": "3. RESPONSABILIDADES",
+        "intro": "El usuario es responsable de:",
+        "items": [
+          "Mantener sus credenciales en secreto",
+          "Utilizar el sistema solo para fines autorizados",
+          "Reportar inmediatamente cualquier acceso no autorizado",
+          "Seguir todos los protocolos de recolección establecidos"
+        ]
+      },
+      "lgpd": {
+        "title": "4. PROTECCIÓN DE DATOS",
+        "body": "Todos los datos recolectados siguen las directrices de protección de datos. El tratamiento se realiza con base en el consentimiento de los responsables legales y para fines específicos de cribado neonatal."
+      },
+      "audit": {
+        "title": "5. AUDITORÍA",
+        "body": "Todas las acciones realizadas en el sistema se registran para fines de auditoría y trazabilidad, incluyendo accesos, recolecciones y cambios de datos."
+      },
+      "penalties": {
+        "title": "6. PENALIDADES",
+        "body": "El incumplimiento de este término puede resultar en sanciones administrativas, civiles y penales, conforme a la legislación vigente."
+      },
+      "validity": {
+        "title": "7. VIGENCIA",
+        "body": "Este término entra en vigor en la fecha de aceptación y permanece válido durante todo el período de uso del sistema."
+      }
+    }
+  },
+  "collection": {
+    "first": {
+      "title": "Primera Recolección",
+      "description": "Identificación de la madre y configuración del escáner"
+    },
+    "errors": {
+      "saveTitle": "Error al guardar",
+      "saveDescription": "No fue posible procesar los datos."
+    },
+    "mother": {
+      "sectionTitle": "Datos de la Madre",
+      "cpfLabel": "CPF (opcional)",
+      "cpfPlaceholder": "000.000.000-00",
+      "rgLabel": "RG (opcional)",
+      "rgPlaceholder": "Ingrese el RG",
+      "fullNameLabel": "Nombre completo de la madre (con apellido) *",
+      "fullNamePlaceholder": "Nombre y apellido de la madre",
+      "savedTitle": "Registro de la madre guardado",
+      "savedDescription": "Continúe con los datos del bebé.",
+      "errors": {
+        "requiredTitle": "Campo obligatorio",
+        "requiredDescription": "El nombre de la madre es obligatorio.",
+        "lastNameTitle": "Apellido obligatorio",
+        "lastNameDescription": "Es necesario informar el nombre completo con apellido.",
+        "invalidCpfTitle": "CPF inválido",
+        "invalidCpfDescription": "Verifique el CPF informado.",
+        "duplicateTitle": "Nombre ya registrado",
+        "duplicateDescription": "Ya existe un registro con el nombre \"{{name}}\"."
+      }
+    },
+    "scanner": {
+      "sectionTitle": "Configuración del Escáner",
+      "label": "Seleccione el escáner *",
+      "placeholder": "Elija un escáner",
+      "empty": "No se encontró ningún escáner activo.",
+      "errors": {
+        "missingTitle": "Escáner no seleccionado",
+        "missingDescription": "Seleccione un escáner válido."
+      }
+    }
+    ,
+    "baby": {
+      "title": "Identificación del Bebé",
+      "description": "Registre los datos del recién nacido",
+      "sectionTitle": "Datos del Bebé",
+      "nameLabel": "Nombre del bebé (opcional)",
+      "namePlaceholder": "Nombre del bebé",
+      "birthDateLabel": "Fecha de Nacimiento *",
+      "birthDatePlaceholder": "DD;MM;AAAA",
+      "birthTimeLabel": "Hora de Nacimiento (opcional)",
+      "birthTimeHelp": "Use las flechas para ajustar hora, minuto y segundo",
+      "starting": "Iniciando...",
+      "startAction": "Iniciar Recolección",
+      "sessionStartedTitle": "Sesión iniciada",
+      "sessionStartedDescription": "Continúe con la captura de huellas.",
+      "errors": {
+        "missingMotherTitle": "Error",
+        "missingMotherDescription": "Datos de la madre no encontrados. Reinicie el proceso.",
+        "requiredTitle": "Campo obligatorio",
+        "requiredDescription": "La fecha de nacimiento es obligatoria.",
+        "invalidDateTitle": "Fecha inválida",
+        "invalidDateDescription": "Ingrese la fecha en el formato DD;MM;AAAA.",
+        "sessionTitle": "Error al iniciar sesión",
+        "sessionDescription": "No fue posible crear la sesión de recolección."
+      }
+    }
+  },
+  "recollection": {
+    "description": "Busque el registro de la madre para iniciar la recolecta",
+    "searchTitle": "Buscar Registro",
+    "searching": "Buscando...",
+    "selectRecordLabel": "Seleccione el registro",
+    "selectRecordPlaceholder": "Elija un registro",
+    "selectedMotherTitle": "Madre seleccionada:",
+    "selectBabyLabel": "Seleccione el bebé *",
+    "selectBabyPlaceholder": "Elija el bebé",
+    "babyBirthValue": "Nacimiento: {{value}}",
+    "selectScannerLabel": "Seleccione el escáner *",
+    "selectScannerPlaceholder": "Elija un escáner",
+    "starting": "Iniciando...",
+    "startAction": "Iniciar Recolecta",
+    "sessionStartedTitle": "Sesión iniciada",
+    "sessionStartedDescription": "Recolecta iniciada con éxito.",
+    "results": {
+      "singleTitle": "Registro encontrado",
+      "singleDescription": "Madre: {{name}}",
+      "multipleTitle": "Resultados encontrados",
+      "multipleDescription": "{{count}} registros encontrados. Seleccione abajo."
+    },
+    "fields": {
+      "motherName": "Nombre de la madre (opcional)",
+      "motherNamePlaceholder": "Escriba parte del nombre",
+      "cpfLabel": "CPF (opcional)",
+      "cpfPlaceholder": "Ingrese el CPF",
+      "rgLabel": "RG (opcional)",
+      "rgPlaceholder": "Ingrese el RG",
+      "babyDateLabel": "Fecha del bebé (opcional)",
+      "babyDatePlaceholder": "DD;MM;AAAA",
+      "cpfValue": "CPF: {{value}}",
+      "rgValue": "RG: {{value}}"
+    },
+    "errors": {
+      "invalidCpfTitle": "CPF inválido",
+      "invalidCpfDescription": "Verifique el CPF informado.",
+      "notFoundTitle": "No se encontraron registros",
+      "notFoundDescription": "Ajuste los filtros (nombre, CPF, RG o fecha) y vuelva a intentarlo.",
+      "searchTitle": "Error en la búsqueda",
+      "searchDescription": "No fue posible buscar el registro.",
+      "requiredTitle": "Campos obligatorios",
+      "requiredDescription": "Seleccione el bebé y el escáner.",
+      "startTitle": "Error al iniciar",
+      "startDescription": "No fue posible iniciar la recolecta."
+    }
+  },
+  "capture": {
+    "title": "Captura de Huellas",
+    "session": "Sesión",
+    "fingerPosition": "Posición del Dedo",
+    "rightHand": "Mano Derecha",
+    "leftHand": "Mano Izquierda",
+    "hands": {
+      "right": "mano derecha",
+      "left": "mano izquierda"
+    },
+    "handSideRight": "Derecho",
+    "handSideLeft": "Izquierdo",
+    "selectHandHint": "Seleccione la mano y el dedo para iniciar la captura.",
+    "progressSummary": "Progreso: {{done}}/{{total}} dedos capturados",
+    "progressLabel": "Progreso general",
+    "fingersCount": "{{done}}/{{total}} dedos",
+    "capturing": "Capturando...",
+    "waiting": "Esperando",
+    "quality": "Calidad: {{value}}%",
+    "skipFinger": "Saltar dedo",
+    "finish": "Finalizar captura",
+    "buttonCaptured": "{{finger}} capturado",
+    "buttonCapture": "Capturar {{finger}} {{hand}}",
+    "toasts": {
+      "capturedTitle": "Captura realizada",
+      "capturedDescription": "{{finger}} de la {{hand}} capturado con éxito"
+    },
+    "fingers": {
+      "thumb": "Pulgar",
+      "index": "Índice",
+      "middle": "Medio",
+      "ring": "Anular",
+      "pinky": "Meñique"
+    },
+    "fingerAbbrev": {
+      "thumb": "P",
+      "index": "I",
+      "middle": "M",
+      "ring": "A",
+      "pinky": "Ñ"
+    },
+    "settings": {
+      "title": "Configuraciones de Captura",
+      "quickTitle": "Captura Rápida",
+      "quickDescription": "Captura solo Pulgar e Índice",
+      "autoAdvanceTitle": "Avance Automático",
+      "autoAdvanceDescription": "Avanza automáticamente después de la captura",
+      "soundTitle": "Habilitar Sonido",
+      "soundDescription": "Señales sonoras durante la captura",
+      "manualTitle": "Manual de Instrucciones",
+      "manualDescription": "Guía de buenas prácticas"
+    },
+    "confirm": {
+      "title": "¿Finalizar captura?",
+      "description": "¿Desea finalizar las capturas y avanzar?",
+      "pendingDescription": "Algunos dedos no fueron capturados o presentaron error. ¿Desea finalizar de todos modos?",
+      "help": "Podrá revisar en el formulario antes de concluir la sesión."
+    }
+  },
+  "pincer": {
+    "title": "Recolección de Pinza",
+    "backToCapture": "Volver a la Captura",
+    "description": "Movimiento de pinza - Pulgar e Índice | Progreso: {{done}}/{{total}} dedos",
+    "positionTitle": "Posición de la Pinza",
+    "hint": "Coloque el pulgar y el índice del bebé juntos, formando el movimiento de pinza",
+    "captureTitle": "Captura de Pinza",
+    "finish": "Finalizar captura de pinzas",
+    "confirm": {
+      "title": "¿Finalizar captura de pinzas?",
+      "description": "¿Desea finalizar las capturas y avanzar?",
+      "pendingDescription": "Algunos dedos no fueron capturados o presentaron error. ¿Desea finalizar de todos modos?",
+      "help": "Podrá revisar en el formulario antes de concluir la sesión."
+    }
+  },
+  "form": {
+    "title": "Formulario Post-Recolección",
+    "description": "Complete la información de la sesión de recolección",
+    "selectPlaceholder": "Seleccione una opción",
+    "successTitle": "Formulario registrado",
+    "successDescription": "Recolección finalizada con éxito",
+    "errors": {
+      "title": "Error",
+      "requiredFields": "Complete los campos obligatorios",
+      "allQuestions": "Responda todas las preguntas del cuestionario",
+      "justification": "Indique el motivo de la recolección parcial (mínimo 10 caracteres)",
+      "save": "Error al guardar el formulario"
+    },
+    "incompleteTitle": "Captura incompleta",
+    "incompleteDescription": "Dedos sin captura: {{fingers}}. Confirme los datos y registre una justificación en el campo de observaciones si es necesario.",
+    "environment": {
+      "title": "Condiciones Ambientales",
+      "description": "Registre las condiciones del ambiente durante la recolección",
+      "temperature": "Temperatura (°C) *",
+      "humidity": "Humedad (%) *",
+      "mixType": "Tipo de Mezcla *",
+      "mixOptions": {
+        "mix1": "Mezcla 1",
+        "mix3": "Mezcla 3",
+        "alcohol": "Alcohol"
+      }
+    },
+    "questionnaire": {
+      "title": "Cuestionario del Procedimiento",
+      "description": "Responda las preguntas sobre las condiciones de la recolección",
+      "q1": {
+        "label": "1. Presión aplicada por el sensor sobre los dedos *",
+        "options": {
+          "lightConstant": "Leve y constante en todos los dedos",
+          "lightVariations": "Predominantemente leve, con pequeñas variaciones",
+          "irregular": "Irregular, variando entre leve y fuerte",
+          "strongMajority": "Predominantemente fuerte en la mayoría de los dedos",
+          "strongConstant": "Fuerte y constante en todos los dedos"
+        }
+      },
+      "q2": {
+        "label": "2. Comportamiento del bebé durante la recolección (sueño/estado) *",
+        "options": {
+          "sleptAll": "Durmió durante toda la recolección",
+          "awokeCalm": "Se despertó durante la recolección y permaneció calmado",
+          "awokeAgitated": "Se despertó durante la recolección y quedó agitado",
+          "awakeCalm": "Permaneció despierto y calmado durante toda la recolección",
+          "awakeAgitated": "Permaneció despierto y agitado durante toda la recolección"
+        }
+      },
+      "q3": {
+        "label": "3. Humedad de la mano del bebé durante la recolección *",
+        "options": {
+          "dryAll": "Piel seca durante toda la recolección",
+          "sweatyDried": "Llegó sudada, fue secada y permaneció seca",
+          "sweatyAgain": "Llegó sudada, fue secada y volvió a sudar"
+        }
+      },
+      "q4": {
+        "label": "4. Lactancia durante la recolección *",
+        "options": {
+          "outside": "Fuera del pecho durante toda la recolección",
+          "some": "Amamantó en algún momento de la recolección",
+          "all": "Amamantó durante toda la recolección"
+        }
+      },
+      "q5": {
+        "label": "5. Facilidad para posicionar los dedos del recién nacido *",
+        "options": {
+          "flexibleImmediate": "Flexibles, posicionamiento inmediato sin resistencia",
+          "flexibleAttempts": "Flexibles, posicionamiento correcto después de pocos intentos",
+          "slightRigidity": "Leve rigidez, requirió ajustes repetidos para posicionar",
+          "rigidEffort": "Rígidos, requirió esfuerzo para posicionar correctamente",
+          "closed": "Cerrados, imposibilitando el posicionamiento"
+        }
+      },
+      "q6": {
+        "label": "6. Posición del recién nacido durante la recolección *",
+        "options": {
+          "crib": "Cuna",
+          "lap": "Regazo (responsable o profesional)"
+        }
+      },
+      "q7": {
+        "label": "7. ¿Hubo interferencia durante la recolecta? *",
+        "options": {
+          "yes": "Sí, hubo interferencia relevante",
+          "no": "No, sin interferencias"
+        }
+      },
+      "q8": {
+        "label": "8. Iluminación del ambiente *",
+        "options": {
+          "veryDim": "Muy débil (ambiente oscuro)",
+          "dim": "Débil",
+          "adequate": "Adecuada (iluminación regular)",
+          "strong": "Fuerte",
+          "veryStrong": "Muy fuerte (ambiente muy claro)"
+        }
+      },
+      "q9": {
+        "label": "9. Aceptación de la familia *",
+        "options": {
+          "resistance": "Resistencia o incomodidad",
+          "neutral": "Aceptación neutra, sin manifestaciones",
+          "enthusiasm": "Entusiasmo y apoyo"
+        }
+      },
+      "q10": {
+        "label": "10. Tamiz neonatal (prueba del talón) *",
+        "options": {
+          "notDone": "No realizado o sin registro",
+          "normal": "Realizado, resultado dentro de la normalidad",
+          "altered": "Realizado, alteración detectada"
+        }
+      }
+    },
+    "justification": {
+      "title": "Algo salió mal durante la recolección",
+      "description": "Justificación obligatoria para recolección parcial o rápida",
+      "label": "Motivo: *",
+      "placeholder": "Explique lo que sucedió (mínimo 10 caracteres)..."
+    }
+  },
+  "conclusion": {
+    "title": "Recolección Concluida",
+    "description": "Resumen de la sesión de recolección biométrica",
+    "sessionInfoTitle": "Información de la Sesión",
+    "motherLabel": "Madre",
+    "babyLabel": "Bebé",
+    "babyNoName": "Sin nombre",
+    "typeLabel": "Tipo",
+    "durationLabel": "Tiempo Transcurrido",
+    "durationValue": "{{minutes}} minutos",
+    "syncLabel": "Sincronización",
+    "syncSent": "Enviado",
+    "syncPending": "Pendiente",
+    "matching": "Matching",
+    "enabled": "Habilitado",
+    "resultsTitle": "Resultados de la Captura",
+    "resultsDescription": "Resumen de dedos capturados",
+    "success": "Éxito",
+    "partial": "Parcial",
+    "failure": "Fallo",
+    "newSession": "Nueva Sesión",
+    "viewSessions": "Ver Sesiones",
+    "reports": "Informes"
+  },
+  "sync": {
+    "title": "Sincronización",
+    "queueTitle": "Cola de Sincronización",
+    "queueDescription": "Gestione los elementos en espera de sincronización con el servidor",
+    "retryAll": "Reintentar Todo Ahora",
+    "retryAllTitle": "Sincronización iniciada",
+    "retryAllDescription": "Procesando todos los elementos pendientes",
+    "retryScheduledTitle": "Reintento programado",
+    "retryScheduledDescription": "El elemento se procesará nuevamente",
+    "itemRemovedTitle": "Elemento eliminado",
+    "itemRemovedDescription": "El elemento fue eliminado de la cola",
+    "confirmRemove": "¿Está seguro de que desea descartar este elemento?",
+    "pending": "Pendientes",
+    "withError": "Con Error",
+    "totalInQueue": "Total en la Cola",
+    "itemsTitle": "Elementos en la Cola",
+    "itemsDescription": "Lista de todos los elementos en espera de sincronización",
+    "empty": "No hay elementos en la cola de sincronización",
+    "queueTypes": {
+      "SESSAO": "Sesión",
+      "DEDO": "Dedo",
+      "FORMULARIO": "Formulario",
+      "IMAGEM": "Imagen",
+      "AUDITORIA": "Auditoría",
+      "LOGIN_EVENTO": "Evento de Inicio de Sesión"
+    },
+    "queueStatus": {
+      "PENDENTE": "PENDIENTE",
+      "ENVIANDO": "ENVIANDO",
+      "ERRO": "ERROR",
+      "CONFLITO": "CONFLICTO",
+      "CONCLUIDO": "CONCLUIDO"
+    },
+    "table": {
+      "type": "Tipo",
+      "status": "Estado",
+      "priority": "Prioridad",
+      "attempts": "Intentos",
+      "lastError": "Último Error",
+      "createdAt": "Fecha de Creación",
+      "actions": "Acciones"
+    }
+  },
+  "sessionTypes": {
+    "PRIMEIRA_COLETA": "Primera Recolección",
+    "RECOLETA": "Recolecta"
+  },
+  "fingerTypes": {
+    "POLEGAR_D": "Pulgar Derecho",
+    "POLEGAR_E": "Pulgar Izquierdo",
+    "INDICADOR_D": "Índice Derecho",
+    "INDICADOR_E": "Índice Izquierdo",
+    "MEDIO_D": "Medio Derecho",
+    "MEDIO_E": "Medio Izquierdo",
+    "ANELAR_D": "Anular Derecho",
+    "ANELAR_E": "Anular Izquierdo",
+    "MINIMO_D": "Meñique Derecho",
+    "MINIMO_E": "Meñique Izquierdo"
+  },
+  "fingerResults": {
+    "SUCESSO": "Éxito",
+    "PARCIAL": "Parcial",
+    "FALHA": "Fallo"
+  },
+  "index": {
+    "title": "Bienvenido a tu app",
+    "subtitle": "¡Empieza a construir tu proyecto aquí!"
+  },
+  "userSettings": {
+    "title": "Configuración del Usuario",
+    "adminDescription": "Administre usuarios y parámetros del sistema",
+    "userDescription": "Ajuste sus preferencias personales",
+    "createUserTitle": "Registrar nuevo usuario",
+    "createUserDescription": "Cree una nueva cuenta en el sistema",
+    "manageUsersTitle": "Gestionar usuarios",
+    "manageUsersDescription": "Buscar, editar, restablecer contraseña y gestionar estado",
+    "changePasswordTitle": "Cambiar contraseña",
+    "changePasswordDescription": "Cambiar la contraseña del usuario conectado",
+    "backToMenu": "Volver al Menú",
+    "createUserDialogTitle": "Registrar Nuevo Usuario",
+    "manageUsersDialogTitle": "Gestionar Usuarios"
+  },
+  "forgotPassword": {
+    "title": "Recuperar Acceso",
+    "description": "Para recuperar su contraseña, contacte al administrador del sistema. Para más información, hable con soporte.",
+    "supportLabel": "Soporte:"
+  },
+  "changePassword": {
+    "title": "Cambiar Contraseña",
+    "currentPassword": "Contraseña Actual *",
+    "newPassword": "Nueva Contraseña *",
+    "confirmPassword": "Confirmar Nueva Contraseña *",
+    "minHint": "Mínimo de 8 caracteres",
+    "successTitle": "Contraseña cambiada",
+    "successDescription": "Contraseña cambiada con éxito",
+    "errors": {
+      "title": "Error",
+      "required": "Complete todos los campos",
+      "minLength": "La contraseña debe tener al menos 8 caracteres",
+      "mismatch": "Las contraseñas no coinciden"
+    }
+  },
+  "users": {
+    "breadcrumb": "Usuarios",
+    "title": "Gestionar Usuarios",
+    "description": "Listar, buscar y administrar cuentas existentes",
+    "new": "Nuevo Usuario",
+    "searchPlaceholder": "Buscar por nombre, login o CPF...",
+    "empty": "Ningún usuario encontrado",
+    "filters": {
+      "profile": "Perfil",
+      "status": "Estado",
+      "allProfiles": "Todos los perfiles",
+      "allStatuses": "Todos los estados"
+    },
+    "profiles": {
+      "admin": "Administrador",
+      "operator": "Operador",
+      "supervisor": "Supervisor"
+    },
+    "table": {
+      "name": "Nombre",
+      "login": "Login",
+      "profile": "Perfil",
+      "status": "Estado",
+      "lastAccess": "Último acceso",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "edit": "Editar",
+      "resetPassword": "Restablecer contraseña",
+      "activate": "Activar",
+      "deactivate": "Desactivar",
+      "delete": "Eliminar"
+    },
+    "resetPassword": {
+      "title": "Restablecer Contraseña",
+      "description": "Contraseña temporal generada para {{name}}",
+      "tempLabel": "Contraseña Temporal",
+      "tempHelp": "Esta contraseña debe cambiarse en el primer acceso.",
+      "toastTitle": "Contraseña restablecida",
+      "toastDescription": "Contraseña temporal generada para {{name}}"
+    },
+    "delete": {
+      "title": "Confirmar Eliminación",
+      "confirmSoft": "¿Desea eliminar permanentemente al usuario {{name}}?",
+      "confirmHard": "Esta acción es PERMANENTE e IRREVERSIBLE. ¿Está seguro de que desea eliminar a {{name}}?",
+      "confirmAction": "Confirmar Eliminación",
+      "toastTitle": "Usuario eliminado",
+      "toastDescription": "{{name}} fue removido permanentemente del sistema."
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "toastTitle": "Cambios guardados",
+      "toastDescription": "Usuario {{status}} con éxito"
+    },
+    "errors": {
+      "title": "Error",
+      "notFound": "Usuario no encontrado",
+      "statusUpdate": "No fue posible cambiar el estado del usuario",
+      "delete": "No fue posible eliminar el usuario",
+      "notAllowedTitle": "Operación no permitida",
+      "lastAdminDisable": "No es posible desactivar al último administrador del sistema.",
+      "lastAdminDelete": "No es posible eliminar al último administrador del sistema.",
+      "selfDelete": "No puedes eliminar tu propia cuenta."
+    }
+  },
+  "usersNew": {
+    "title": "Nuevo Usuario",
+    "description": "Agregue un nuevo usuario al sistema",
+    "sectionTitle": "Información del Usuario",
+    "sectionDescription": "Complete los datos del nuevo usuario",
+    "fields": {
+      "name": "Nombre Completo *",
+      "namePlaceholder": "Ingrese el nombre completo",
+      "email": "Email *",
+      "emailPlaceholder": "usuario@ejemplo.com",
+      "profile": "Perfil *",
+      "status": "Estado",
+      "statusHelp": "Los usuarios activos pueden acceder al sistema"
+    },
+    "successTitle": "Usuario creado",
+    "successDescription": "Nuevo usuario agregado con éxito",
+    "errors": {
+      "title": "Error",
+      "required": "Complete todos los campos obligatorios",
+      "save": "Error al crear usuario"
+    }
+  },
+  "usersEdit": {
+    "title": "Editar Usuario",
+    "description": "Actualice los datos del usuario",
+    "sectionTitle": "Información del Usuario",
+    "sectionDescription": "Modifique los datos según sea necesario",
+    "passwordSectionTitle": "Cambiar Contraseña (opcional)",
+    "fields": {
+      "name": "Nombre Completo *",
+      "cpf": "CPF",
+      "cpfPlaceholder": "000.000.000-00",
+      "login": "Usuario (Login) *",
+      "birthDate": "Fecha de Nacimiento",
+      "birthDatePlaceholder": "DD;MM;AAAA",
+      "profile": "Perfil *",
+      "status": "Estado",
+      "statusHelp": "Los usuarios activos pueden acceder al sistema",
+      "newPassword": "Nueva Contraseña",
+      "newPasswordPlaceholder": "Déjelo en blanco para mantener la actual",
+      "confirmPassword": "Confirmar Nueva Contraseña"
+    },
+    "successTitle": "Perfil actualizado",
+    "successDescription": "Cambios guardados con éxito",
+    "errors": {
+      "title": "Error",
+      "load": "Error al cargar datos del usuario",
+      "required": "Complete todos los campos obligatorios",
+      "invalidCpf": "CPF inválido",
+      "invalidBirthDate": "Ingrese la fecha de nacimiento en el formato DD;MM;AAAA.",
+      "minPassword": "La contraseña debe tener al menos 8 caracteres",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "save": "Error al actualizar el usuario"
+    }
+  },
+  "usersManage": {
+    "title": "Gestionar Usuarios",
+    "description": "Visualice y gestione todos los usuarios registrados",
+    "searchPlaceholder": "Buscar por nombre o usuario...",
+    "status": {
+      "toastTitle": "Estado actualizado",
+      "toastDescription": "Usuario {{status}} con éxito."
+    },
+    "delete": {
+      "title": "Confirmar eliminación",
+      "description": "Esta acción no se puede deshacer. El usuario será eliminado permanentemente del sistema.",
+      "toastTitle": "Usuario eliminado",
+      "toastDescription": "El usuario fue eliminado del sistema."
+    },
+    "errors": {
+      "statusTitle": "Error al actualizar estado",
+      "statusDescription": "No fue posible cambiar el estado del usuario.",
+      "deleteTitle": "Error al eliminar",
+      "deleteDescription": "No fue posible eliminar el usuario."
+    }
+  },
+  "usersCreate": {
+    "title": "Registrar Nuevo Usuario",
+    "description": "Cree una nueva cuenta de usuario en el sistema",
+    "sectionTitle": "Datos del Usuario",
+    "fields": {
+      "name": "Nombre completo *",
+      "cpf": "CPF *",
+      "cpfPlaceholder": "000.000.000-00",
+      "login": "Usuario *",
+      "birthDate": "Fecha de nacimiento",
+      "birthDatePlaceholder": "DD;MM;AAAA",
+      "birthDatePlaceholder": "DD;MM;AAAA",
+      "status": "Estado *",
+      "initialPassword": "Contraseña inicial *",
+      "confirmPassword": "Confirmar contraseña *"
+    },
+    "successTitle": "Usuario creado",
+    "successDescription": "El usuario fue creado con éxito.",
+    "errors": {
+      "invalidCpfTitle": "CPF inválido",
+      "invalidCpfDescription": "Verifique el CPF informado.",
+      "shortPasswordTitle": "Contraseña demasiado corta",
+      "shortPasswordDescription": "La contraseña debe tener al menos 8 caracteres.",
+      "passwordMismatchTitle": "Las contraseñas no coinciden",
+      "passwordMismatchDescription": "La contraseña y la confirmación deben ser iguales.",
+      "invalidBirthDateTitle": "Fecha inválida",
+      "invalidBirthDateDescription": "Ingrese la fecha de nacimiento en el formato DD;MM;AAAA.",
+      "invalidBirthDateTitle": "Fecha inválida",
+      "invalidBirthDateDescription": "Ingrese la fecha de nacimiento en el formato DD;MM;AAAA.",
+      "cpfExistsTitle": "CPF ya registrado",
+      "cpfExistsDescription": "Este CPF ya está en uso.",
+      "userExistsTitle": "Usuario ya registrado",
+      "userExistsDescription": "Este nombre de usuario ya está en uso.",
+      "createTitle": "Error al crear usuario",
+      "createDescription": "No fue posible registrar el usuario."
+    }
+  },
+  "usersCreateModal": {
+    "fields": {
+      "name": "Nombre completo *",
+      "cpf": "CPF",
+      "cpfPlaceholder": "000.000.000-00",
+      "login": "Email/Login *",
+      "birthDate": "Fecha de nacimiento",
+      "profile": "Perfil *",
+      "status": "Estado *",
+      "initialPassword": "Contraseña inicial *",
+      "confirmPassword": "Confirmar contraseña *",
+      "passwordHint": "Mínimo de 8 caracteres"
+    },
+    "successTitle": "Usuario creado",
+    "successDescription": "El usuario fue creado con éxito.",
+    "errors": {
+      "invalidCpfTitle": "CPF inválido",
+      "invalidCpfDescription": "Verifique el CPF informado.",
+      "shortPasswordTitle": "Contraseña demasiado corta",
+      "shortPasswordDescription": "La contraseña debe tener al menos 8 caracteres.",
+      "passwordMismatchTitle": "Las contraseñas no coinciden",
+      "passwordMismatchDescription": "La contraseña y la confirmación deben ser iguales.",
+      "cpfExistsTitle": "CPF ya registrado",
+      "cpfExistsDescription": "Este CPF ya está en uso.",
+      "userExistsTitle": "Usuario ya registrado",
+      "userExistsDescription": "Este email ya está en uso.",
+      "createTitle": "Error al crear usuario",
+      "createDescription": "No fue posible registrar el usuario."
+    }
+  },
+  "reports": {
+    "breadcrumb": "Informes",
+    "title": "Informes y Estadísticas",
+    "description": "Visualice y exporte datos del sistema",
+    "exportCsv": "Exportar CSV",
+    "totalSessions": "Total de Sesiones",
+    "successRate": "Tasa de Éxito",
+    "activeUsers": "Usuarios Activos",
+    "capturedFingers": "Dedos Capturados",
+    "monthlyGrowth": "+{{value}}% este mes",
+    "sessionsByType": "Sesiones por Tipo",
+    "last30Days": "Distribución en los últimos 30 días",
+    "sessionsByTypeValue": "{{count}} ({{percent}}%)",
+    "topOperators": "Operadores Más Activos",
+    "sessionsThisMonth": "Sesiones realizadas este mes",
+    "operators": {
+      "operator": "Operador de Recolección",
+      "admin": "Administrador del Sistema",
+      "supervisor": "Supervisor Principal"
+    },
+    "sessionsChart": "Gráfico de Sesiones",
+    "last7Days": "Últimos 7 días",
+    "chartPlaceholder": "Gráfico de sesiones por día"
+  },
+  "audit": {
+    "breadcrumb": "Auditoría",
+    "title": "Auditoría del Sistema",
+    "description": "Visualice todas las acciones realizadas en el sistema",
+    "searchPlaceholder": "Buscar por acción o entidad...",
+    "empty": "No se encontraron registros de auditoría",
+    "table": {
+      "dateTime": "Fecha/Hora",
+      "action": "Acción",
+      "entity": "Entidad",
+      "user": "Usuario",
+      "device": "Dispositivo",
+      "ip": "IP",
+      "sync": "Sincronización"
+    },
+    "actions": {
+      "CRIAR": "CREAR",
+      "ATUALIZAR": "ACTUALIZAR",
+      "EXCLUIR": "ELIMINAR"
+    },
+    "syncStatus": {
+      "SINCRONIZADO": "SINCRONIZADO",
+      "ERRO": "ERROR",
+      "PENDENTE": "PENDIENTE"
+    }
+  },
+  "sessions": {
+    "breadcrumb": "Sesiones",
+    "title": "Sesiones de Recolección",
+    "description": "Visualice y gestione las sesiones realizadas",
+    "new": "Nueva Sesión",
+    "searchPlaceholder": "Buscar por ID...",
+    "details": "Detalles",
+    "empty": "No se encontraron sesiones",
+    "table": {
+      "id": "ID",
+      "type": "Tipo",
+      "status": "Estado",
+      "startDate": "Fecha de Inicio",
+      "endDate": "Fecha de Fin",
+      "sync": "Sincronización",
+      "actions": "Acciones"
+    },
+    "status": {
+      "CONCLUIDA": "CONCLUIDA",
+      "EM_ANDAMENTO": "EN PROGRESO",
+      "CANCELADA": "CANCELADA"
+    },
+    "sync": {
+      "SINCRONIZADO": "SINCRONIZADO",
+      "ERRO": "ERROR",
+      "PENDENTE": "PENDIENTE"
+    }
+  },
+  "loginEvents": {
+    "breadcrumb": "Eventos de Inicio de Sesión",
+    "title": "Eventos de Inicio de Sesión",
+    "description": "Historial de intentos de acceso al sistema",
+    "searchPlaceholder": "Buscar por email...",
+    "empty": "No se encontraron eventos de inicio de sesión",
+    "table": {
+      "dateTime": "Fecha/Hora",
+      "email": "Email",
+      "status": "Estado",
+      "failureReason": "Motivo de Fallo",
+      "device": "Dispositivo",
+      "ip": "IP"
+    },
+    "status": {
+      "success": "Éxito",
+      "failure": "Fallo"
+    }
+  },
+  "connectivity": {
+    "online": "En línea",
+    "offline": "Sin conexión"
+  },
+  "syncStatus": {
+    "synced": "Sincronizado",
+    "errors": "{{count}} error(es)",
+    "pending": "{{count}} pendiente(s)"
+  },
+  "timePicker": {
+    "hours": "Hora",
+    "minutes": "Min",
+    "seconds": "Seg",
+    "scrollHint": "↕ Scroll"
+  },
+  "babyHands": {
+    "regionLabel": "Visualización de las manos del bebé",
+    "imageAlt": "Ilustración frontal del bebé con manos abiertas — referencia para la captura de huellas",
+    "highlightRight": "Mano Derecha destacada",
+    "highlightLeft": "Mano Izquierda destacada",
+    "fingerTitle": "{{finger}} — {{hand}} ({{status}})",
+    "fingerAria": "{{finger}} de la {{hand}} — estado: {{status}}",
+    "liveRegion": "Actual: {{finger}} — Mano: {{hand}}",
+    "status": {
+      "current": "Actual",
+      "captured": "Capturado",
+      "capturing": "En captura",
+      "skipped": "Omitido",
+      "pending": "Pendiente"
+    }
+  },
+  "settings": {
+    "title": "Configuraciones",
+    "description": "Administre sus preferencias y datos del sistema",
+    "userPrefs": "Preferencias del Usuario",
+    "userPrefsDescription": "Personalice su experiencia en el sistema",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeSystem": "Sistema",
+    "language": "Idioma",
+    "notifications": "Notificaciones",
+    "notificationsDescription": "Recibir alertas de sincronización y eventos",
+    "savePrefs": "Guardar Preferencias",
+    "storageTitle": "Almacenamiento Local",
+    "storageDescription": "Administre el espacio utilizado en el dispositivo",
+    "quotaUsed": "Cuota utilizada",
+    "storageCalculating": "Calculando...",
+    "storageUnavailable": "No disponible",
+    "clearLocalData": "Borrar Datos Locales",
+    "clearLocalDataDescription": "Elimina todos los datos almacenados localmente",
+    "systemInfo": "Información del Sistema",
+    "version": "Versión",
+    "lastSync": "Última Sincronización",
+    "lastSyncValue": "Hace 5 minutos",
+    "database": "Base de Datos",
+    "confirmClearTitle": "ATENCIÓN: Esta acción eliminará todos los datos locales. Solo los datos sincronizados podrán recuperarse del servidor. ¿Desea continuar?",
+    "clearedTitle": "Datos eliminados",
+    "clearedDescription": "La caché local se eliminó correctamente",
+    "clearErrorTitle": "Error al borrar datos",
+    "clearErrorDescription": "No fue posible eliminar los datos locales.",
+    "savedTitle": "Configuraciones guardadas",
+    "savedDescription": "Sus preferencias fueron actualizadas"
+  }
+}

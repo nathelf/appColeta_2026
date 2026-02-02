@@ -1,0 +1,946 @@
+{
+  "common": {
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "continue": "Continuar",
+    "finish": "Finalizar",
+    "close": "Fechar",
+    "search": "Buscar",
+    "loading": "Carregando...",
+    "processing": "Processando...",
+    "required": "Obrigatório",
+    "optional": "Opcional",
+    "of": "de",
+    "clear": "Limpar",
+    "open": "Abrir",
+    "breadcrumb": "Breadcrumb"
+  },
+  "menu": {
+    "home": "Início",
+    "dashboard": "Dashboard",
+    "collection": "Coleta",
+    "firstCollection": "Primeira Coleta",
+    "recollection": "Recoleta",
+    "administrative": "Administrativo",
+    "users": "Usuários",
+    "system": "Sistema",
+    "sync": "Sincronização",
+    "settings": "Configurações",
+    "logout": "Sair",
+    "config": "Config"
+  },
+  "app": {
+    "title": "Sistema de coleta biométrica neonatal",
+    "subtitle": "Registro de coletas e gerenciamento",
+    "logoAlt": "Logo do Grupo de Pesquisa"
+  },
+  "login": {
+    "title": "Coleta Biométrica",
+    "subtitle": "Sistema de triagem em neonatal",
+    "logoAlt": "Logo Sistema de Coleta Biométrica Neonatal",
+    "aria": {
+      "form": "Formulário de login"
+    },
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "passwordLabel": "Senha",
+    "passwordPlaceholder": "••••••••",
+    "showPassword": "Mostrar senha",
+    "hidePassword": "Ocultar senha",
+    "forgotPassword": "Esqueceu a senha?",
+    "loginButton": "Entrar",
+    "loggingIn": "Entrando...",
+    "offlineHint": "Modo offline disponível após primeiro login",
+    "testAccessTitle": "Acessos de teste",
+    "testAccessDescription": "Enquanto não há banco, use os logins abaixo:",
+    "testAccessAdmin": "Admin",
+    "testAccessAdminCreds": "admin / admin123",
+    "testAccessCollector": "Coletista",
+    "testAccessCollectorCreds": "coletor / coletor123",
+    "testAccessNote": "Também aceita e-mail: admin@local.test ou coletor@local.test.",
+    "languagePlaceholder": "Idioma",
+    "successTitle": "Login realizado",
+    "successDescription": "Bem-vindo(a), {{name}}!",
+    "errors": {
+      "missingFieldsTitle": "Preencha todos os campos",
+      "missingFieldsDescription": "Informe usuário e senha.",
+      "invalidTitle": "Erro no login",
+      "invalidDescription": "Usuário ou senha inválidos.",
+      "connection": "Falha de conexão. Tente novamente."
+    }
+  },
+  "dashboard": {
+    "title": "Iniciar Coleta",
+    "description": "Escolha o tipo de procedimento que deseja realizar.",
+    "firstCardImageAlt": "Pré-coleta bebê",
+    "firstCardDescription": "Inicie a coleta de um recém-nascido ainda não registrado no sistema.",
+    "firstCardAction": "Iniciar Coleta",
+    "recollectionCardImageAlt": "Pós-coleta bebê",
+    "recollectionCardDescription": "Refazer coleta de um bebê já registrado ou completar uma coleta.",
+    "recollectionCardAction": "Iniciar Recoleta"
+  },
+  "notFound": {
+    "title": "Ops! Página não encontrada",
+    "backHome": "Voltar para o início"
+  },
+  "terms": {
+    "title": "Termo de Confidencialidade",
+    "version": "Versão 1.0 - Sistema de Coleta Biométrica Neonatal",
+    "acceptLabel": "Eu aceito o termo de CONFIDENCIALIDADE",
+    "acceptButton": "Aceitar e Continuar",
+    "acceptedTitle": "Termo aceito",
+    "acceptedDescription": "Bem-vindo ao sistema!",
+    "errors": {
+      "notAcceptedTitle": "Termo não aceito",
+      "notAcceptedDescription": "Você precisa aceitar os termos para continuar."
+    },
+    "sections": {
+      "object": {
+        "title": "1. OBJETO",
+        "body": "O presente Termo estabelece as condições de confidencialidade para acesso e uso do Sistema de Coleta Biométrica Neonatal."
+      },
+      "confidentiality": {
+        "title": "2. CONFIDENCIALIDADE",
+        "body": "O usuário compromete-se a manter sigilo absoluto sobre todas as informações obtidas através do sistema, especialmente dados pessoais e biométricos de recém-nascidos e responsáveis."
+      },
+      "responsibilities": {
+        "title": "3. RESPONSABILIDADES",
+        "intro": "O usuário é responsável por:",
+        "items": [
+          "Manter suas credenciais em sigilo",
+          "Utilizar o sistema apenas para fins autorizados",
+          "Reportar imediatamente qualquer acesso não autorizado",
+          "Seguir todos os protocolos de coleta estabelecidos"
+        ]
+      },
+      "lgpd": {
+        "title": "4. LGPD",
+        "body": "Todos os dados coletados seguem as diretrizes da Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018). O tratamento de dados é realizado com base no consentimento dos responsáveis legais e para finalidades específicas de triagem neonatal."
+      },
+      "audit": {
+        "title": "5. AUDITORIA",
+        "body": "Todas as ações realizadas no sistema são registradas para fins de auditoria e rastreabilidade, incluindo acessos, coletas e alterações de dados."
+      },
+      "penalties": {
+        "title": "6. PENALIDADES",
+        "body": "O descumprimento deste termo pode resultar em sanções administrativas, civis e criminais, conforme previsto na legislação vigente."
+      },
+      "validity": {
+        "title": "7. VIGÊNCIA",
+        "body": "Este termo entra em vigor na data de sua aceitação e permanece válido durante todo o período de utilização do sistema."
+      }
+    }
+  },
+  "collection": {
+    "first": {
+      "title": "Primeira Coleta",
+      "description": "Identificação da mãe e configuração do scanner"
+    },
+    "errors": {
+      "saveTitle": "Erro ao salvar",
+      "saveDescription": "Não foi possível processar os dados."
+    },
+    "mother": {
+      "sectionTitle": "Dados da Mãe",
+      "cpfLabel": "CPF (opcional)",
+      "cpfPlaceholder": "000.000.000-00",
+      "rgLabel": "RG (opcional)",
+      "rgPlaceholder": "Digite o RG",
+      "fullNameLabel": "Nome completo da mãe (com sobrenome) *",
+      "fullNamePlaceholder": "Nome e sobrenome da mãe",
+      "savedTitle": "Cadastro da mãe salvo",
+      "savedDescription": "Continue com os dados do bebê.",
+      "errors": {
+        "requiredTitle": "Campo obrigatório",
+        "requiredDescription": "O nome da mãe é obrigatório.",
+        "lastNameTitle": "Sobrenome obrigatório",
+        "lastNameDescription": "É necessário informar o nome completo com sobrenome.",
+        "invalidCpfTitle": "CPF inválido",
+        "invalidCpfDescription": "Por favor, verifique o CPF informado.",
+        "duplicateTitle": "Nome já cadastrado",
+        "duplicateDescription": "Já existe um cadastro com o nome \"{{name}}\"."
+      }
+    },
+    "scanner": {
+      "sectionTitle": "Configuração do Scanner",
+      "label": "Selecione o scanner *",
+      "placeholder": "Escolha um scanner",
+      "empty": "Nenhum scanner ativo encontrado.",
+      "errors": {
+        "missingTitle": "Scanner não selecionado",
+        "missingDescription": "Selecione um scanner válido."
+      }
+    }
+    ,
+    "baby": {
+      "title": "Identificação do Bebê",
+      "description": "Registre os dados do recém-nascido",
+      "sectionTitle": "Dados do Bebê",
+      "nameLabel": "Nome do bebê (opcional)",
+      "namePlaceholder": "Nome do bebê",
+      "birthDateLabel": "Data de Nascimento *",
+      "birthDatePlaceholder": "DD;MM;AAAA",
+      "birthTimeLabel": "Hora de Nascimento (opcional)",
+      "birthTimeHelp": "Use as setas para ajustar hora, minuto e segundo",
+      "starting": "Iniciando...",
+      "startAction": "Iniciar Coleta",
+      "sessionStartedTitle": "Sessão iniciada",
+      "sessionStartedDescription": "Prossiga para a captura das digitais.",
+      "errors": {
+        "missingMotherTitle": "Erro",
+        "missingMotherDescription": "Dados da mãe não encontrados. Reinicie o processo.",
+        "requiredTitle": "Campo obrigatório",
+        "requiredDescription": "A data de nascimento é obrigatória.",
+        "invalidDateTitle": "Data inválida",
+        "invalidDateDescription": "Informe a data no formato DD;MM;AAAA.",
+        "sessionTitle": "Erro ao iniciar sessão",
+        "sessionDescription": "Não foi possível criar a sessão de coleta."
+      }
+    }
+  },
+  "recollection": {
+    "description": "Busque o cadastro da mãe para iniciar a recoleta",
+    "searchTitle": "Buscar Cadastro",
+    "searching": "Buscando...",
+    "selectRecordLabel": "Selecione o cadastro",
+    "selectRecordPlaceholder": "Escolha um cadastro",
+    "selectedMotherTitle": "Mãe selecionada:",
+    "selectBabyLabel": "Selecione o bebê *",
+    "selectBabyPlaceholder": "Escolha o bebê",
+    "babyBirthValue": "Nascimento: {{value}}",
+    "selectScannerLabel": "Selecione o scanner *",
+    "selectScannerPlaceholder": "Escolha um scanner",
+    "starting": "Iniciando...",
+    "startAction": "Iniciar Recoleta",
+    "sessionStartedTitle": "Sessão iniciada",
+    "sessionStartedDescription": "Recoleta iniciada com sucesso.",
+    "results": {
+      "singleTitle": "Cadastro encontrado",
+      "singleDescription": "Mãe: {{name}}",
+      "multipleTitle": "Resultados encontrados",
+      "multipleDescription": "{{count}} cadastros encontrados. Selecione abaixo."
+    },
+    "fields": {
+      "motherName": "Nome da mãe (opcional)",
+      "motherNamePlaceholder": "Digite parte do nome",
+      "cpfLabel": "CPF (opcional)",
+      "cpfPlaceholder": "Digite o CPF",
+      "rgLabel": "RG (opcional)",
+      "rgPlaceholder": "Digite o RG",
+      "babyDateLabel": "Data do bebê (opcional)",
+      "babyDatePlaceholder": "DD;MM;AAAA",
+      "cpfValue": "CPF: {{value}}",
+      "rgValue": "RG: {{value}}"
+    },
+    "errors": {
+      "invalidCpfTitle": "CPF inválido",
+      "invalidCpfDescription": "Por favor, verifique o CPF informado.",
+      "notFoundTitle": "Nenhum cadastro encontrado",
+      "notFoundDescription": "Ajuste os filtros (nome, CPF, RG ou data) e tente novamente.",
+      "searchTitle": "Erro na busca",
+      "searchDescription": "Não foi possível buscar o cadastro.",
+      "requiredTitle": "Campos obrigatórios",
+      "requiredDescription": "Selecione o bebê e o scanner.",
+      "startTitle": "Erro ao iniciar",
+      "startDescription": "Não foi possível iniciar a recoleta."
+    }
+  },
+  "capture": {
+    "title": "Captura de Digitais",
+    "session": "Sessão",
+    "fingerPosition": "Posição do Dedo",
+    "rightHand": "Mão Direita",
+    "leftHand": "Mão Esquerda",
+    "hands": {
+      "right": "mão direita",
+      "left": "mão esquerda"
+    },
+    "handSideRight": "Direito",
+    "handSideLeft": "Esquerdo",
+    "selectHandHint": "Selecione a mão e o dedo para iniciar a captura das digitais.",
+    "progressSummary": "Progresso: {{done}}/{{total}} dedos capturados",
+    "progressLabel": "Progresso geral",
+    "fingersCount": "{{done}}/{{total}} dedos",
+    "capturing": "Capturando...",
+    "waiting": "Aguardando",
+    "quality": "Qualidade: {{value}}%",
+    "skipFinger": "Pular Dedo",
+    "finish": "Finalizar captura",
+    "buttonCaptured": "{{finger}} Capturado",
+    "buttonCapture": "Capturar {{finger}} {{hand}}",
+    "toasts": {
+      "capturedTitle": "Captura realizada",
+      "capturedDescription": "{{finger}} da {{hand}} capturado com sucesso"
+    },
+    "fingers": {
+      "thumb": "Polegar",
+      "index": "Indicador",
+      "middle": "Médio",
+      "ring": "Anelar",
+      "pinky": "Mindinho"
+    },
+    "fingerAbbrev": {
+      "thumb": "P",
+      "index": "I",
+      "middle": "M",
+      "ring": "A",
+      "pinky": "Mi"
+    },
+    "settings": {
+      "title": "Configurações de Captura",
+      "quickTitle": "Coleta Rápida",
+      "quickDescription": "Captura apenas Polegar e Indicador",
+      "autoAdvanceTitle": "Avanço Automático",
+      "autoAdvanceDescription": "Avança automaticamente após captura",
+      "soundTitle": "Habilitar Som",
+      "soundDescription": "Sinais sonoros durante captura",
+      "manualTitle": "Manual de Instruções",
+      "manualDescription": "Guia de boas práticas"
+    },
+    "confirm": {
+      "title": "Finalizar captura?",
+      "description": "Deseja finalizar as capturas e avançar?",
+      "pendingDescription": "Alguns dedos não foram capturados ou apresentaram erro. Deseja finalizar mesmo assim?",
+      "help": "Você poderá revisar no formulário antes de concluir a sessão."
+    }
+  },
+  "pincer": {
+    "title": "Coleta de Pinças",
+    "backToCapture": "Voltar à Captura",
+    "description": "Movimento de pinça - Polegar e Indicador | Progresso: {{done}}/{{total}} dedos",
+    "positionTitle": "Posição da Pinça",
+    "hint": "Posicione os dedos polegar e indicador do bebê juntos, formando o movimento de pinça",
+    "captureTitle": "Captura de Pinça",
+    "finish": "Finalizar captura de pinças",
+    "confirm": {
+      "title": "Finalizar captura de pinças?",
+      "description": "Deseja finalizar as capturas e avançar?",
+      "pendingDescription": "Alguns dedos não foram capturados ou apresentaram erro. Deseja finalizar mesmo assim?",
+      "help": "Você poderá revisar no formulário antes de concluir a sessão."
+    }
+  },
+  "form": {
+    "title": "Formulário Pós-Coleta",
+    "description": "Complete as informações da sessão de coleta",
+    "selectPlaceholder": "Selecione uma opção",
+    "successTitle": "Formulário registrado",
+    "successDescription": "Coleta encerrada com sucesso",
+    "errors": {
+      "title": "Erro",
+      "requiredFields": "Preencha os campos obrigatórios",
+      "allQuestions": "Preencha todas as perguntas do questionário",
+      "justification": "Informe o motivo da coleta parcial (mínimo 10 caracteres)",
+      "save": "Falha ao salvar formulário"
+    },
+    "incompleteTitle": "Captura incompleta",
+    "incompleteDescription": "Dedos sem captura: {{fingers}}. Confirme os dados e registre justificativa no campo de observações, se necessário.",
+    "environment": {
+      "title": "Condições Ambientais",
+      "description": "Registre as condições do ambiente durante a coleta",
+      "temperature": "Temperatura (°C) *",
+      "humidity": "Umidade (%) *",
+      "mixType": "Tipo de Mistura *",
+      "mixOptions": {
+        "mix1": "Mistura 1",
+        "mix3": "Mistura 3",
+        "alcohol": "Álcool"
+      }
+    },
+    "questionnaire": {
+      "title": "Questionário de Procedimento",
+      "description": "Responda as perguntas sobre as condições da coleta",
+      "q1": {
+        "label": "1. Pressão aplicada pelo sensor sobre os dedos *",
+        "options": {
+          "lightConstant": "Leve e constante em todos os dedos",
+          "lightVariations": "Predominantemente leve, com pequenas variações",
+          "irregular": "Irregular, variando entre leve e forte",
+          "strongMajority": "Predominantemente forte na maioria dos dedos",
+          "strongConstant": "Forte e constante em todos os dedos"
+        }
+      },
+      "q2": {
+        "label": "2. Comportamento do bebê durante a coleta (sono/estado) *",
+        "options": {
+          "sleptAll": "Dormiu durante toda a coleta",
+          "awokeCalm": "Acordou durante a coleta e permaneceu calmo",
+          "awokeAgitated": "Acordou durante a coleta e ficou agitado",
+          "awakeCalm": "Permaneceu acordado e calmo durante toda a coleta",
+          "awakeAgitated": "Permaneceu acordado e agitado durante toda a coleta"
+        }
+      },
+      "q3": {
+        "label": "3. Umidade da mão do bebê durante a coleta *",
+        "options": {
+          "dryAll": "Pele seca durante toda a coleta",
+          "sweatyDried": "Chegou suada, foi seca e permaneceu seca",
+          "sweatyAgain": "Chegou suada, foi seca e voltou a suar"
+        }
+      },
+      "q4": {
+        "label": "4. Amamentação durante a coleta *",
+        "options": {
+          "outside": "Fora do peito durante toda a coleta",
+          "some": "Amamentou em algum momento da coleta",
+          "all": "Amamentou durante toda a coleta"
+        }
+      },
+      "q5": {
+        "label": "5. Facilidade para posicionar os dedos do recém-nascido *",
+        "options": {
+          "flexibleImmediate": "Flexíveis, posicionamento imediato sem resistência",
+          "flexibleAttempts": "Flexíveis, posicionamento correto após poucas tentativas",
+          "slightRigidity": "Leve rigidez, exigiu ajustes repetidos para posicionar",
+          "rigidEffort": "Rígidos, exigiu esforço para posicionar corretamente",
+          "closed": "Fechados, impossibilitando o posicionamento"
+        }
+      },
+      "q6": {
+        "label": "6. Posição do recém-nascido durante a coleta *",
+        "options": {
+          "crib": "Berço",
+          "lap": "Colo (responsável ou profissional)"
+        }
+      },
+      "q7": {
+        "label": "7. Houve interferência durante a recoleta? *",
+        "options": {
+          "yes": "Sim, houve interferência relevante",
+          "no": "Não, sem interferências"
+        }
+      },
+      "q8": {
+        "label": "8. Iluminação do ambiente *",
+        "options": {
+          "veryDim": "Muito fraca (ambiente escuro)",
+          "dim": "Fraca",
+          "adequate": "Adequada (iluminação regular)",
+          "strong": "Forte",
+          "veryStrong": "Muito forte (ambiente muito claro)"
+        }
+      },
+      "q9": {
+        "label": "9. Aceitação da família *",
+        "options": {
+          "resistance": "Resistência ou desconforto",
+          "neutral": "Aceitação neutra, sem manifestações",
+          "enthusiasm": "Entusiasmo e apoio"
+        }
+      },
+      "q10": {
+        "label": "10. Triagem neonatal (Teste do pezinho) *",
+        "options": {
+          "notDone": "Não realizado ou sem registro",
+          "normal": "Realizado, resultado dentro da normalidade",
+          "altered": "Realizado, alteração detectada"
+        }
+      }
+    },
+    "justification": {
+      "title": "Algo de errado aconteceu durante a coleta",
+      "description": "Justificativa obrigatória para coleta parcial ou rápida",
+      "label": "Motivo: *",
+      "placeholder": "Explique o que aconteceu (mínimo 10 caracteres)..."
+    }
+  },
+  "conclusion": {
+    "title": "Coleta Concluída",
+    "description": "Resumo da sessão de coleta biométrica",
+    "sessionInfoTitle": "Informações da Sessão",
+    "motherLabel": "Mãe",
+    "babyLabel": "Bebê",
+    "babyNoName": "Sem nome",
+    "typeLabel": "Tipo",
+    "durationLabel": "Tempo Decorrido",
+    "durationValue": "{{minutes}} minutos",
+    "syncLabel": "Sincronização",
+    "syncSent": "Enviado",
+    "syncPending": "Pendente",
+    "matching": "Matching",
+    "enabled": "Habilitado",
+    "resultsTitle": "Resultados da Captura",
+    "resultsDescription": "Resumo dos dedos capturados",
+    "success": "Sucesso",
+    "partial": "Parcial",
+    "failure": "Falha",
+    "newSession": "Nova Sessão",
+    "viewSessions": "Ver Sessões",
+    "reports": "Relatórios"
+  },
+  "sync": {
+    "title": "Sincronização",
+    "queueTitle": "Fila de Sincronização",
+    "queueDescription": "Gerencie os itens aguardando sincronização com o servidor",
+    "retryAll": "Tentar Tudo Agora",
+    "retryAllTitle": "Sincronização iniciada",
+    "retryAllDescription": "Processando todos os itens pendentes",
+    "retryScheduledTitle": "Tentativa agendada",
+    "retryScheduledDescription": "Item será processado novamente",
+    "itemRemovedTitle": "Item removido",
+    "itemRemovedDescription": "Item foi descartado da fila",
+    "confirmRemove": "Tem certeza que deseja descartar este item?",
+    "pending": "Pendentes",
+    "withError": "Com Erro",
+    "totalInQueue": "Total na Fila",
+    "itemsTitle": "Itens na Fila",
+    "itemsDescription": "Lista de todos os itens aguardando sincronização",
+    "empty": "Nenhum item na fila de sincronização",
+    "queueTypes": {
+      "SESSAO": "Sessão",
+      "DEDO": "Dedo",
+      "FORMULARIO": "Formulário",
+      "IMAGEM": "Imagem",
+      "AUDITORIA": "Auditoria",
+      "LOGIN_EVENTO": "Evento de Login"
+    },
+    "queueStatus": {
+      "PENDENTE": "PENDENTE",
+      "ENVIANDO": "ENVIANDO",
+      "ERRO": "ERRO",
+      "CONFLITO": "CONFLITO",
+      "CONCLUIDO": "CONCLUIDO"
+    },
+    "table": {
+      "type": "Tipo",
+      "status": "Status",
+      "priority": "Prioridade",
+      "attempts": "Tentativas",
+      "lastError": "Último Erro",
+      "createdAt": "Data Criação",
+      "actions": "Ações"
+    }
+  },
+  "sessionTypes": {
+    "PRIMEIRA_COLETA": "Primeira Coleta",
+    "RECOLETA": "Recoleta"
+  },
+  "fingerTypes": {
+    "POLEGAR_D": "Polegar Direito",
+    "POLEGAR_E": "Polegar Esquerdo",
+    "INDICADOR_D": "Indicador Direito",
+    "INDICADOR_E": "Indicador Esquerdo",
+    "MEDIO_D": "Médio Direito",
+    "MEDIO_E": "Médio Esquerdo",
+    "ANELAR_D": "Anelar Direito",
+    "ANELAR_E": "Anelar Esquerdo",
+    "MINIMO_D": "Mínimo Direito",
+    "MINIMO_E": "Mínimo Esquerdo"
+  },
+  "fingerResults": {
+    "SUCESSO": "Sucesso",
+    "PARCIAL": "Parcial",
+    "FALHA": "Falha"
+  },
+  "index": {
+    "title": "Bem-vindo ao seu app",
+    "subtitle": "Comece a construir seu projeto aqui!"
+  },
+  "userSettings": {
+    "title": "Configurações do Usuário",
+    "adminDescription": "Gerencie usuários e parâmetros do sistema",
+    "userDescription": "Ajuste suas preferências pessoais",
+    "createUserTitle": "Cadastrar novo usuário",
+    "createUserDescription": "Crie uma nova conta no sistema",
+    "manageUsersTitle": "Gerenciar usuários",
+    "manageUsersDescription": "Buscar, editar, redefinir senha e gerenciar status",
+    "changePasswordTitle": "Mudar senha",
+    "changePasswordDescription": "Alterar senha do usuário logado",
+    "backToMenu": "Voltar ao Menu",
+    "createUserDialogTitle": "Cadastrar Novo Usuário",
+    "manageUsersDialogTitle": "Gerenciar Usuários"
+  },
+  "forgotPassword": {
+    "title": "Recuperar Acesso",
+    "description": "Para recuperar sua senha, entre em contato com o administrador do sistema. Para mais informações, fale com o suporte.",
+    "supportLabel": "Suporte:"
+  },
+  "changePassword": {
+    "title": "Alterar Senha",
+    "currentPassword": "Senha Atual *",
+    "newPassword": "Nova Senha *",
+    "confirmPassword": "Confirmar Nova Senha *",
+    "minHint": "Mínimo de 8 caracteres",
+    "successTitle": "Senha alterada",
+    "successDescription": "Senha alterada com sucesso",
+    "errors": {
+      "title": "Erro",
+      "required": "Preencha todos os campos",
+      "minLength": "A senha deve ter no mínimo 8 caracteres",
+      "mismatch": "As senhas não coincidem"
+    }
+  },
+  "users": {
+    "breadcrumb": "Usuários",
+    "title": "Gerenciar Usuários",
+    "description": "Listar, buscar e operar sobre contas existentes",
+    "new": "Novo Usuário",
+    "searchPlaceholder": "Buscar por nome, login ou CPF...",
+    "empty": "Nenhum usuário encontrado",
+    "filters": {
+      "profile": "Perfil",
+      "status": "Status",
+      "allProfiles": "Todos os perfis",
+      "allStatuses": "Todos os status"
+    },
+    "profiles": {
+      "admin": "Administrador",
+      "operator": "Operador",
+      "supervisor": "Supervisor"
+    },
+    "table": {
+      "name": "Nome",
+      "login": "Login",
+      "profile": "Perfil",
+      "status": "Status",
+      "lastAccess": "Último acesso",
+      "actions": "Ações"
+    },
+    "actions": {
+      "edit": "Editar",
+      "resetPassword": "Redefinir senha",
+      "activate": "Ativar",
+      "deactivate": "Inativar",
+      "delete": "Excluir"
+    },
+    "resetPassword": {
+      "title": "Redefinir Senha",
+      "description": "Senha temporária gerada para {{name}}",
+      "tempLabel": "Senha Temporária",
+      "tempHelp": "Esta senha deve ser alterada no primeiro acesso.",
+      "toastTitle": "Senha redefinida",
+      "toastDescription": "Senha temporária gerada para {{name}}"
+    },
+    "delete": {
+      "title": "Confirmar Exclusão",
+      "confirmSoft": "Deseja excluir permanentemente o usuário {{name}}?",
+      "confirmHard": "Esta ação é PERMANENTE e IRREVERSÍVEL. Tem certeza absoluta que deseja excluir {{name}}?",
+      "confirmAction": "Confirmar Exclusão",
+      "toastTitle": "Usuário excluído",
+      "toastDescription": "{{name}} foi removido permanentemente do sistema."
+    },
+    "status": {
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "toastTitle": "Alterações salvas",
+      "toastDescription": "Usuário {{status}} com sucesso"
+    },
+    "errors": {
+      "title": "Erro",
+      "notFound": "Usuário não encontrado",
+      "statusUpdate": "Não foi possível alterar o status do usuário",
+      "delete": "Não foi possível excluir o usuário",
+      "notAllowedTitle": "Operação não permitida",
+      "lastAdminDisable": "Não é possível inativar o último administrador do sistema.",
+      "lastAdminDelete": "Não é possível excluir o último administrador do sistema.",
+      "selfDelete": "Você não pode excluir sua própria conta."
+    }
+  },
+  "usersNew": {
+    "title": "Novo Usuário",
+    "description": "Adicione um novo usuário ao sistema",
+    "sectionTitle": "Informações do Usuário",
+    "sectionDescription": "Preencha os dados do novo usuário",
+    "fields": {
+      "name": "Nome Completo *",
+      "namePlaceholder": "Digite o nome completo",
+      "email": "Email *",
+      "emailPlaceholder": "usuario@exemplo.com",
+      "profile": "Perfil *",
+      "status": "Status",
+      "statusHelp": "Usuário ativo pode acessar o sistema"
+    },
+    "successTitle": "Usuário criado",
+    "successDescription": "Novo usuário adicionado com sucesso",
+    "errors": {
+      "title": "Erro",
+      "required": "Preencha todos os campos obrigatórios",
+      "save": "Falha ao criar usuário"
+    }
+  },
+  "usersEdit": {
+    "title": "Editar Usuário",
+    "description": "Atualize os dados do usuário",
+    "sectionTitle": "Informações do Usuário",
+    "sectionDescription": "Modifique os dados conforme necessário",
+    "passwordSectionTitle": "Alterar Senha (opcional)",
+    "fields": {
+      "name": "Nome Completo *",
+      "cpf": "CPF",
+      "cpfPlaceholder": "000.000.000-00",
+      "login": "Usuário (Login) *",
+      "birthDate": "Data de Nascimento",
+      "birthDatePlaceholder": "DD;MM;AAAA",
+      "profile": "Perfil *",
+      "status": "Status",
+      "statusHelp": "Usuário ativo pode acessar o sistema",
+      "newPassword": "Nova Senha",
+      "newPasswordPlaceholder": "Deixe em branco para manter a atual",
+      "confirmPassword": "Confirmar Nova Senha"
+    },
+    "successTitle": "Perfil atualizado",
+    "successDescription": "Alterações salvas com sucesso",
+    "errors": {
+      "title": "Erro",
+      "load": "Falha ao carregar dados do usuário",
+      "required": "Preencha todos os campos obrigatórios",
+      "invalidCpf": "CPF inválido",
+      "invalidBirthDate": "Informe a data de nascimento no formato DD;MM;AAAA.",
+      "minPassword": "A senha deve ter no mínimo 8 caracteres",
+      "passwordMismatch": "As senhas não coincidem",
+      "save": "Falha ao atualizar usuário"
+    }
+  },
+  "usersManage": {
+    "title": "Gerenciar Usuários",
+    "description": "Visualize e gerencie todos os usuários cadastrados",
+    "searchPlaceholder": "Buscar por nome ou usuário...",
+    "status": {
+      "toastTitle": "Status atualizado",
+      "toastDescription": "Usuário {{status}} com sucesso."
+    },
+    "delete": {
+      "title": "Confirmar exclusão",
+      "description": "Esta ação não pode ser desfeita. O usuário será removido permanentemente do sistema.",
+      "toastTitle": "Usuário excluído",
+      "toastDescription": "O usuário foi removido do sistema."
+    },
+    "errors": {
+      "statusTitle": "Erro ao atualizar status",
+      "statusDescription": "Não foi possível alterar o status do usuário.",
+      "deleteTitle": "Erro ao excluir",
+      "deleteDescription": "Não foi possível remover o usuário."
+    }
+  },
+  "usersCreate": {
+    "title": "Cadastrar Novo Usuário",
+    "description": "Crie uma nova conta de usuário no sistema",
+    "sectionTitle": "Dados do Usuário",
+    "fields": {
+      "name": "Nome completo *",
+      "cpf": "CPF *",
+      "cpfPlaceholder": "000.000.000-00",
+      "login": "Usuário *",
+      "birthDate": "Data de nascimento",
+      "birthDatePlaceholder": "DD;MM;AAAA",
+      "birthDatePlaceholder": "DD;MM;AAAA",
+      "status": "Status *",
+      "initialPassword": "Senha inicial *",
+      "confirmPassword": "Confirmar senha *"
+    },
+    "successTitle": "Usuário criado",
+    "successDescription": "O usuário foi cadastrado com sucesso.",
+    "errors": {
+      "invalidCpfTitle": "CPF inválido",
+      "invalidCpfDescription": "Por favor, verifique o CPF informado.",
+      "shortPasswordTitle": "Senha muito curta",
+      "shortPasswordDescription": "A senha deve ter no mínimo 8 caracteres.",
+      "passwordMismatchTitle": "Senhas não coincidem",
+      "passwordMismatchDescription": "A senha e a confirmação devem ser iguais.",
+      "invalidBirthDateTitle": "Data inválida",
+      "invalidBirthDateDescription": "Informe a data de nascimento no formato DD;MM;AAAA.",
+      "invalidBirthDateTitle": "Data inválida",
+      "invalidBirthDateDescription": "Informe a data de nascimento no formato DD;MM;AAAA.",
+      "cpfExistsTitle": "CPF já cadastrado",
+      "cpfExistsDescription": "Este CPF já está em uso.",
+      "userExistsTitle": "Usuário já cadastrado",
+      "userExistsDescription": "Este nome de usuário já está em uso.",
+      "createTitle": "Erro ao criar usuário",
+      "createDescription": "Não foi possível cadastrar o usuário."
+    }
+  },
+  "usersCreateModal": {
+    "fields": {
+      "name": "Nome completo *",
+      "cpf": "CPF",
+      "cpfPlaceholder": "000.000.000-00",
+      "login": "Email/Login *",
+      "birthDate": "Data de nascimento",
+      "profile": "Perfil *",
+      "status": "Status *",
+      "initialPassword": "Senha inicial *",
+      "confirmPassword": "Confirmar senha *",
+      "passwordHint": "Mínimo de 8 caracteres"
+    },
+    "successTitle": "Usuário criado",
+    "successDescription": "O usuário foi cadastrado com sucesso.",
+    "errors": {
+      "invalidCpfTitle": "CPF inválido",
+      "invalidCpfDescription": "Por favor, verifique o CPF informado.",
+      "shortPasswordTitle": "Senha muito curta",
+      "shortPasswordDescription": "A senha deve ter no mínimo 8 caracteres.",
+      "passwordMismatchTitle": "Senhas não coincidem",
+      "passwordMismatchDescription": "A senha e a confirmação devem ser iguais.",
+      "cpfExistsTitle": "CPF já cadastrado",
+      "cpfExistsDescription": "Este CPF já está em uso.",
+      "userExistsTitle": "Usuário já cadastrado",
+      "userExistsDescription": "Este email já está em uso.",
+      "createTitle": "Erro ao criar usuário",
+      "createDescription": "Não foi possível cadastrar o usuário."
+    }
+  },
+  "reports": {
+    "breadcrumb": "Relatórios",
+    "title": "Relatórios e Estatísticas",
+    "description": "Visualize e exporte dados do sistema",
+    "exportCsv": "Exportar CSV",
+    "totalSessions": "Total de Sessões",
+    "successRate": "Taxa de Sucesso",
+    "activeUsers": "Usuários Ativos",
+    "capturedFingers": "Dedos Capturados",
+    "monthlyGrowth": "+{{value}}% este mês",
+    "sessionsByType": "Sessões por Tipo",
+    "last30Days": "Distribuição nos últimos 30 dias",
+    "sessionsByTypeValue": "{{count}} ({{percent}}%)",
+    "topOperators": "Operadores Mais Ativos",
+    "sessionsThisMonth": "Sessões realizadas este mês",
+    "operators": {
+      "operator": "Operador Coleta",
+      "admin": "Administrador Sistema",
+      "supervisor": "Supervisor Principal"
+    },
+    "sessionsChart": "Gráfico de Sessões",
+    "last7Days": "Últimos 7 dias",
+    "chartPlaceholder": "Gráfico de sessões por dia"
+  },
+  "audit": {
+    "breadcrumb": "Auditoria",
+    "title": "Auditoria do Sistema",
+    "description": "Visualize todas as ações realizadas no sistema",
+    "searchPlaceholder": "Buscar por ação ou entidade...",
+    "empty": "Nenhum registro de auditoria encontrado",
+    "table": {
+      "dateTime": "Data/Hora",
+      "action": "Ação",
+      "entity": "Entidade",
+      "user": "Usuário",
+      "device": "Dispositivo",
+      "ip": "IP",
+      "sync": "Sincronização"
+    },
+    "actions": {
+      "CRIAR": "CRIAR",
+      "ATUALIZAR": "ATUALIZAR",
+      "EXCLUIR": "EXCLUIR"
+    },
+    "syncStatus": {
+      "SINCRONIZADO": "SINCRONIZADO",
+      "ERRO": "ERRO",
+      "PENDENTE": "PENDENTE"
+    }
+  },
+  "sessions": {
+    "breadcrumb": "Sessões",
+    "title": "Sessões de Coleta",
+    "description": "Visualize e gerencie as sessões realizadas",
+    "new": "Nova Sessão",
+    "searchPlaceholder": "Buscar por ID...",
+    "details": "Detalhes",
+    "empty": "Nenhuma sessão encontrada",
+    "table": {
+      "id": "ID",
+      "type": "Tipo",
+      "status": "Status",
+      "startDate": "Data Início",
+      "endDate": "Data Fim",
+      "sync": "Sincronização",
+      "actions": "Ações"
+    },
+    "status": {
+      "CONCLUIDA": "CONCLUIDA",
+      "EM_ANDAMENTO": "EM ANDAMENTO",
+      "CANCELADA": "CANCELADA"
+    },
+    "sync": {
+      "SINCRONIZADO": "SINCRONIZADO",
+      "ERRO": "ERRO",
+      "PENDENTE": "PENDENTE"
+    }
+  },
+  "loginEvents": {
+    "breadcrumb": "Eventos de Login",
+    "title": "Eventos de Login",
+    "description": "Histórico de tentativas de acesso ao sistema",
+    "searchPlaceholder": "Buscar por email...",
+    "empty": "Nenhum evento de login encontrado",
+    "table": {
+      "dateTime": "Data/Hora",
+      "email": "Email",
+      "status": "Status",
+      "failureReason": "Motivo da Falha",
+      "device": "Dispositivo",
+      "ip": "IP"
+    },
+    "status": {
+      "success": "Sucesso",
+      "failure": "Falha"
+    }
+  },
+  "connectivity": {
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "syncStatus": {
+    "synced": "Sincronizado",
+    "errors": "{{count}} erro(s)",
+    "pending": "{{count}} pendente(s)"
+  },
+  "timePicker": {
+    "hours": "Hora",
+    "minutes": "Min",
+    "seconds": "Seg",
+    "scrollHint": "↕ Scroll"
+  },
+  "babyHands": {
+    "regionLabel": "Visualização das mãos do bebê",
+    "imageAlt": "Ilustração de bebê de frente com mãos abertas — referência para coleta das digitais",
+    "highlightRight": "Mão Direita em destaque",
+    "highlightLeft": "Mão Esquerda em destaque",
+    "fingerTitle": "{{finger}} — {{hand}} ({{status}})",
+    "fingerAria": "{{finger}} da {{hand}} — estado: {{status}}",
+    "liveRegion": "Atual: {{finger}} — Mão: {{hand}}",
+    "status": {
+      "current": "Atual",
+      "captured": "Capturado",
+      "capturing": "Em captura",
+      "skipped": "Pulado",
+      "pending": "Pendente"
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "description": "Gerencie suas preferências e dados do sistema",
+    "userPrefs": "Preferências do Usuário",
+    "userPrefsDescription": "Personalize sua experiência no sistema",
+    "theme": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
+    "themeSystem": "Sistema",
+    "language": "Idioma",
+    "notifications": "Notificações",
+    "notificationsDescription": "Receber alertas sobre sincronização e eventos",
+    "savePrefs": "Salvar Preferências",
+    "storageTitle": "Armazenamento Local",
+    "storageDescription": "Gerencie o espaço utilizado no dispositivo",
+    "quotaUsed": "Quota Utilizada",
+    "storageCalculating": "Calculando...",
+    "storageUnavailable": "Indisponível",
+    "clearLocalData": "Limpar Dados Locais",
+    "clearLocalDataDescription": "Remove todos os dados armazenados localmente",
+    "systemInfo": "Informações do Sistema",
+    "version": "Versão",
+    "lastSync": "Última Sincronização",
+    "lastSyncValue": "Há 5 minutos",
+    "database": "Banco de Dados",
+    "confirmClearTitle": "ATENÇÃO: Esta ação irá remover todos os dados locais. Apenas dados já sincronizados poderão ser recuperados do servidor. Deseja continuar?",
+    "clearedTitle": "Dados limpos",
+    "clearedDescription": "Cache local foi removido com sucesso",
+    "clearErrorTitle": "Erro ao limpar dados",
+    "clearErrorDescription": "Não foi possível remover os dados locais.",
+    "savedTitle": "Configurações salvas",
+    "savedDescription": "Suas preferências foram atualizadas"
+  }
+}
