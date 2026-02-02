@@ -49,6 +49,8 @@ export default defineConfig(({ mode }: { mode: string }) => {
           ]
         },
         workbox: {
+          // Aumenta o limite de cache para 4MB (4 * 1024 * 1024 bytes)
+          maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
           globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
           runtimeCaching: [
             {
