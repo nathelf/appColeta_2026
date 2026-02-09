@@ -9,6 +9,7 @@ import { formatCPF, validateCPF } from '@/lib/cpf';
 import { dateDDMMYYYYToISO } from '@/lib/utils';
 import { Eye, EyeOff } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { enqueueSyncItem } from '@/lib/sync';
 
 interface CadastrarUsuarioModalProps {
   onClose: () => void;
@@ -108,7 +109,8 @@ export default function CadastrarUsuarioModal({ onClose }: CadastrarUsuarioModal
       }
 
       // Criar usuário
-      await db.usuarios.add({
+      const usuarioId = await db.usuarios.add({
+        uuid: crypto.randomUUID(),
         nome,
         email: usuario,
         cpf: cpfNumeros || undefined,
@@ -118,6 +120,15 @@ export default function CadastrarUsuarioModal({ onClose }: CadastrarUsuarioModal
         createdAt: new Date(),
         updatedAt: new Date()
       });
+      const novoUsuario = await db.usuarios.get(usuarioId);
+      if (novoUsuario) {
+        await enqueueSyncItem({
+          tipo: 'USUARIO',
+          table: 'usuarios',
+          data: novoUsuario,
+          prioridade: 1
+        });
+      }
 
       toast({
         title: t('usersCreateModal.successTitle'),

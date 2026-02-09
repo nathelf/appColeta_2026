@@ -12,6 +12,7 @@ import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/db';
 import { useTranslation } from 'react-i18next';
+import { enqueueSyncItem } from '@/lib/sync';
 
 export default function UsuariosNovo() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function UsuariosNovo() {
     }
 
     try {
-      await db.usuarios.add({
+      const usuarioId = await db.usuarios.add({
         uuid: crypto.randomUUID(),
         nome,
         email,
@@ -43,6 +44,15 @@ export default function UsuariosNovo() {
         createdAt: new Date(),
         updatedAt: new Date()
       });
+      const usuario = await db.usuarios.get(usuarioId);
+      if (usuario) {
+        await enqueueSyncItem({
+          tipo: 'USUARIO',
+          table: 'usuarios',
+          data: usuario,
+          prioridade: 1
+        });
+      }
 
       toast({
         title: t('usersNew.successTitle'),

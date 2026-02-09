@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { UserCog } from 'lucide-react';
 import { routes } from '@/lib/routes';
-import { getAuthUser } from '@/lib/auth';
 import { FingerprintBackground } from '@/components/FingerprintBackground';
 import babyColeta from '@/assets/baby_coleta.png';
 import babyRecoleta from '@/assets/baby_recoleta.png';
@@ -10,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 
 export default function MenuColeta() {
   const navigate = useNavigate();
-  const user = getAuthUser();
   const { t } = useTranslation();
 
   return (
@@ -18,16 +15,6 @@ export default function MenuColeta() {
       <FingerprintBackground />
       
       <div className="relative z-10 w-full max-w-5xl">
-        {/* User settings icon */}
-        <div className="absolute top-0 left-0">
-          <button
-            onClick={() => navigate('/config/usuario')}
-            className="w-12 h-12 bg-secondary/90 hover:bg-secondary rounded-lg flex items-center justify-center shadow-lg transition-colors"
-          >
-            <UserCog className="h-6 w-6 text-secondary-foreground" />
-          </button>
-        </div>
-
         {/* Main content grid */}
         <div className="grid md:grid-cols-2 gap-8 pt-16">
           {/* Primeira Coleta */}

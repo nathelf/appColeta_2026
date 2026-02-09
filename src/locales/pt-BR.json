@@ -51,6 +51,8 @@
     "passwordPlaceholder": "••••••••",
     "showPassword": "Mostrar senha",
     "hidePassword": "Ocultar senha",
+    "rememberMe": "Lembrar usuário e senha",
+    "rememberWarning": "Não use em computadores públicos.",
     "forgotPassword": "Esqueceu a senha?",
     "loginButton": "Entrar",
     "loggingIn": "Entrando...",
@@ -475,7 +477,7 @@
     "title": "Sincronização",
     "queueTitle": "Fila de Sincronização",
     "queueDescription": "Gerencie os itens aguardando sincronização com o servidor",
-    "retryAll": "Tentar Tudo Agora",
+    "retryAll": "Sincronizar",
     "retryAllTitle": "Sincronização iniciada",
     "retryAllDescription": "Processando todos os itens pendentes",
     "retryScheduledTitle": "Tentativa agendada",
@@ -495,7 +497,12 @@
       "FORMULARIO": "Formulário",
       "IMAGEM": "Imagem",
       "AUDITORIA": "Auditoria",
-      "LOGIN_EVENTO": "Evento de Login"
+      "LOGIN_EVENTO": "Evento de Login",
+      "MAE": "Mãe",
+      "BEBE": "Bebê",
+      "USUARIO": "Usuário",
+      "SCANNER": "Scanner",
+      "ARQUIVO_REFERENCIA": "Arquivo de Referência"
     },
     "queueStatus": {
       "PENDENTE": "PENDENTE",

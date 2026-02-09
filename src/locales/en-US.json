@@ -51,6 +51,8 @@
     "passwordPlaceholder": "••••••••",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
+    "rememberMe": "Remember username and password",
+    "rememberWarning": "Do not use on public computers.",
     "forgotPassword": "Forgot password?",
     "loginButton": "Sign in",
     "loggingIn": "Signing in...",
@@ -475,7 +477,7 @@
     "title": "Synchronization",
     "queueTitle": "Sync Queue",
     "queueDescription": "Manage items waiting to sync with the server",
-    "retryAll": "Retry All Now",
+    "retryAll": "Sync Now",
     "retryAllTitle": "Synchronization started",
     "retryAllDescription": "Processing all pending items",
     "retryScheduledTitle": "Retry scheduled",
@@ -495,7 +497,12 @@
       "FORMULARIO": "Form",
       "IMAGEM": "Image",
       "AUDITORIA": "Audit",
-      "LOGIN_EVENTO": "Login Event"
+      "LOGIN_EVENTO": "Login Event",
+      "MAE": "Mother",
+      "BEBE": "Baby",
+      "USUARIO": "User",
+      "SCANNER": "Scanner",
+      "ARQUIVO_REFERENCIA": "Reference File"
     },
     "queueStatus": {
       "PENDENTE": "PENDING",

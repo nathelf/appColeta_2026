@@ -21,6 +21,7 @@ import { useToast } from '@/hooks/use-toast';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { MoreVertical } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { enqueueSyncItem } from '@/lib/sync';
 
 export default function Usuarios() {
   const navigate = useNavigate();
@@ -157,6 +158,15 @@ export default function Usuarios() {
         ativo: !usuario.ativo,
         updatedAt: new Date()
       });
+      const usuarioAtualizado = await db.usuarios.get(usuarioId);
+      if (usuarioAtualizado) {
+        await enqueueSyncItem({
+          tipo: 'USUARIO',
+          table: 'usuarios',
+          data: usuarioAtualizado,
+          prioridade: 1
+        });
+      }
 
       toast({
         title: t('users.status.toastTitle'),

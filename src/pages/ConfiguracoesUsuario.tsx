@@ -11,13 +11,14 @@ import { AlterarSenhaDialog } from '@/components/AlterarSenhaDialog';
 import CadastrarUsuarioModal from '@/components/CadastrarUsuarioModal';
 import GerenciarUsuariosModal from '@/components/GerenciarUsuariosModal';
 import { useTranslation } from 'react-i18next';
+import { getAuthUser } from '@/lib/auth';
 
 export default function ConfiguracoesUsuario() {
   const navigate = useNavigate();
   const [senhaDialogOpen, setSenhaDialogOpen] = useState(false);
   const [cadastrarUsuarioOpen, setCadastrarUsuarioOpen] = useState(false);
   const [gerenciarUsuariosOpen, setGerenciarUsuariosOpen] = useState(false);
-  const isAdmin = true; // TODO: Verificar perfil real do usuário
+  const isAdmin = getAuthUser()?.perfil === 'ADMINISTRADOR';
   const { t } = useTranslation();
 
   return (

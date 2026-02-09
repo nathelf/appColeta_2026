@@ -14,6 +14,7 @@ import { PageHeader } from '@/components/PageHeader';
 import { routes } from '@/lib/routes';
 import { Eye, EyeOff } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { enqueueSyncItem } from '@/lib/sync';
 
 export default function CadastrarUsuario() {
   const [nome, setNome] = useState('');
@@ -109,7 +110,8 @@ export default function CadastrarUsuario() {
       }
 
       // Criar usuário
-      await db.usuarios.add({
+      const usuarioId = await db.usuarios.add({
+        uuid: crypto.randomUUID(),
         nome,
         email: usuario,
         perfil: 'OPERADOR',
@@ -118,6 +120,15 @@ export default function CadastrarUsuario() {
         createdAt: new Date(),
         updatedAt: new Date()
       });
+      const novoUsuario = await db.usuarios.get(usuarioId);
+      if (novoUsuario) {
+        await enqueueSyncItem({
+          tipo: 'USUARIO',
+          table: 'usuarios',
+          data: novoUsuario,
+          prioridade: 1
+        });
+      }
 
       toast({
         title: t('usersCreate.successTitle'),

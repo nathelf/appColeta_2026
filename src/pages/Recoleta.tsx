@@ -13,6 +13,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { formatCPF, validateCPF } from '@/lib/cpf';
 import { formatDate, dateDDMMYYYYToISO, dateISOToDDMMYYYY } from '@/lib/utils';
 import { getAuthUser } from '@/lib/auth';
+import { enqueueSyncItem } from '@/lib/sync';
 import { Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -295,6 +296,7 @@ export default function Recoleta() {
 
     try {
       const sessaoId = await db.sessoesColeta.add({
+        uuid: crypto.randomUUID(),
         usuarioId: user!.id,
         maeId: maeEncontrada!.id!,
         bebeId: parseInt(bebeId),
@@ -306,6 +308,15 @@ export default function Recoleta() {
         syncStatus: 'PENDENTE',
         createdAt: new Date()
       });
+      const sessao = await db.sessoesColeta.get(sessaoId);
+      if (sessao) {
+        await enqueueSyncItem({
+          tipo: 'SESSAO',
+          table: 'sessoes_coleta',
+          data: sessao,
+          prioridade: 2
+        });
+      }
 
       toast({
         title: t('recollection.sessionStartedTitle'),

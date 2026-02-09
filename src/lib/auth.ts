@@ -4,18 +4,20 @@ export type AuthUser = {
   username: string;
   name: string;
   email?: string;
+  perfil?: 'ADMINISTRADOR' | 'OPERADOR' | 'SUPERVISOR';
+  admin?: boolean;
   roles?: string[];
   token?: string;
   termoAceito?: boolean;
 };
 
-// Usuários mock — agora incluem email
+// Usuários mock — agora incluem email (fallback opcional)
 const MOCK_USERS: Record<
   string,
-  { password: string; name: string; roles?: string[]; email?: string }
+  { password: string; name: string; roles?: string[]; email?: string; perfil?: AuthUser['perfil'] }
 > = {
-  admin: { password: "admin123", name: "Administrador", roles: ["admin"], email: "admin@local.test" },
-  coletor: { password: "coletor123", name: "Coletor", roles: ["collector"], email: "coletor@local.test" },
+  admin: { password: "admin123", name: "Administrador", roles: ["admin"], email: "admin@local.test", perfil: "ADMINISTRADOR" },
+  coletor: { password: "coletor123", name: "Coletor", roles: ["collector"], email: "coletor@local.test", perfil: "OPERADOR" },
   // você pode adicionar mais aqui, por exemplo:
   // "natmagro": { password: "teste123", name: "Nathalia", roles: ["collector"], email: "natmagro11@gmail.com" },
 };
@@ -52,26 +54,68 @@ export async function validateLogin(
   usernameOrEmail: string,
   password: string
 ): Promise<{ success: boolean; user?: AuthUser; message?: string }> {
-  await new Promise((r) => setTimeout(r, 250));
+  const baseUrl = (import.meta.env.VITE_API_BASE_URL || "http://localhost:3001").replace(/\/$/, "");
+  const useMock = import.meta.env.VITE_USE_MOCK_AUTH === "true";
 
-  const rec = findUserRecord(usernameOrEmail);
-  if (!rec) {
-    return { success: false, message: "Usuário não encontrado" };
+  if (useMock) {
+    await new Promise((r) => setTimeout(r, 250));
+
+    const rec = findUserRecord(usernameOrEmail);
+    if (!rec) {
+      return { success: false, message: "Usuário não encontrado" };
+    }
+
+    if (rec.password !== password) {
+      return { success: false, message: "Senha inválida" };
+    }
+
+    const user: AuthUser = {
+      username: rec.username,
+      name: rec.name,
+      email: rec.email,
+      roles: rec.roles,
+      perfil: rec.perfil,
+      termoAceito: getTermoAceito(rec.username),
+    };
+
+    return { success: true, user };
   }
 
-  if (rec.password !== password) {
-    return { success: false, message: "Senha inválida" };
+  try {
+    const response = await fetch(`${baseUrl}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: usernameOrEmail, senha: password }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      return {
+        success: false,
+        message: errorData?.error || "Usuário não encontrado",
+      };
+    }
+
+    const data = await response.json();
+    const apiUser = data?.usuario;
+    const perfil =
+      apiUser?.perfil ||
+      (apiUser?.admin ? "ADMINISTRADOR" : "OPERADOR");
+
+    const user: AuthUser = {
+      username: apiUser?.email || usernameOrEmail,
+      name: apiUser?.nome || usernameOrEmail,
+      email: apiUser?.email || usernameOrEmail,
+      admin: !!apiUser?.admin,
+      perfil,
+      token: data?.token,
+      termoAceito: getTermoAceito(apiUser?.email || usernameOrEmail),
+    };
+
+    return { success: true, user };
+  } catch {
+    return { success: false, message: "Erro de conexão com o servidor" };
   }
-
-  const user: AuthUser = {
-    username: rec.username,
-    name: rec.name,
-    email: rec.email,
-    roles: rec.roles,
-    termoAceito: getTermoAceito(rec.username),
-  };
-
-  return { success: true, user };
 }
 
 /**

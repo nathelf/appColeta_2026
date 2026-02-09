@@ -5,7 +5,6 @@ export function useSyncQueue() {
   const queueItems = useLiveQuery(
     () => db.syncQueue
       .orderBy('prioridade')
-      .reverse()
       .toArray()
   );
 

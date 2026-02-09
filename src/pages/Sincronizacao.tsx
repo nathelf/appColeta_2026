@@ -1,4 +1,4 @@
-import { useSyncQueue } from '@/hooks/useSyncQueue';
+import { useSync } from '@/hooks/useSync';
 import { formatDateTime } from '@/lib/utils';
 import { AppLayout } from '@/components/AppLayout';
 import { Breadcrumb } from '@/components/Breadcrumb';
@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 
 export default function Sincronizacao() {
-  const { queueItems, pendingCount, errorCount, retryItem, removeFromQueue } = useSyncQueue();
+  const { queueItems, pendingCount, errorCount, retryItem, discardItem, syncAll, syncing } = useSync();
   const { toast } = useToast();
   const { t } = useTranslation();
   const getQueueTypeLabel = (tipo: string) =>
@@ -30,7 +30,7 @@ export default function Sincronizacao() {
 
   const handleRemove = async (id: number) => {
     if (confirm(t('sync.confirmRemove'))) {
-      await removeFromQueue(id);
+      await discardItem(id);
       toast({
         title: t('sync.itemRemovedTitle'),
         description: t('sync.itemRemovedDescription')
@@ -38,11 +38,8 @@ export default function Sincronizacao() {
     }
   };
 
-  const handleRetryAll = () => {
-    toast({
-      title: t('sync.retryAllTitle'),
-      description: t('sync.retryAllDescription')
-    });
+  const handleRetryAll = async () => {
+    await syncAll();
   };
 
   return (
@@ -53,7 +50,7 @@ export default function Sincronizacao() {
         title={t('sync.queueTitle')}
         description={t('sync.queueDescription')}
         actions={
-          <Button onClick={handleRetryAll}>
+          <Button onClick={handleRetryAll} disabled={syncing || queueItems.length === 0}>
             <RefreshCw className="h-4 w-4 mr-2" />
             {t('sync.retryAll')}
           </Button>

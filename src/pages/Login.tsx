@@ -4,13 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Lock, User, Eye, EyeOff, Mail } from 'lucide-react';
+import { Lock, Eye, EyeOff, Mail, ShieldCheck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { validateLogin, setAuthUser, getAuthUser } from '@/lib/auth';
 import { ForgotPasswordDialog } from '@/components/ForgotPasswordDialog';
 import { ConnectivityIndicator } from '@/components/ConnectivityIndicator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 import biometriaLogo from '@/assets/biometria-logo.png';
+import babyHandsIllustration from '@/assets/c__Users_pante_AppData_Roaming_Cursor_User_workspaceStorage_e4040b0516a0875295437fc71987783f_images_iamgem_dedo-4a7e784a-20df-4076-8e7d-82e594b8228d.png';
 import { useTranslation } from 'react-i18next';
 
 export default function Login() {
@@ -20,6 +22,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [idioma, setIdioma] = useState('pt-BR');
+  const [rememberCredentials, setRememberCredentials] = useState(false);
 
   const usuarioRef = useRef<HTMLInputElement | null>(null);
   const senhaRef = useRef<HTMLInputElement | null>(null);
@@ -41,6 +44,23 @@ export default function Login() {
     setIdioma(locale);
     i18n.changeLanguage(locale);
   }, [i18n]);
+
+  useEffect(() => {
+    const raw = localStorage.getItem('login-remember');
+    if (!raw) return;
+    try {
+      const saved = JSON.parse(raw) as { usuario?: string; senha?: string };
+      if (saved?.usuario) {
+        setUsuario(saved.usuario);
+      }
+      if (saved?.senha) {
+        setSenha(saved.senha);
+      }
+      if (saved?.usuario || saved?.senha) {
+        setRememberCredentials(true);
+      }
+    } catch {}
+  }, []);
 
   const handleIdiomaChange = (value: string) => {
     const locale = supportedLocales.includes(value as (typeof supportedLocales)[number]) ? value : 'pt-BR';
@@ -73,6 +93,11 @@ export default function Login() {
 
       if (result.success && result.user) {
         setAuthUser(result.user);
+        if (rememberCredentials) {
+          localStorage.setItem('login-remember', JSON.stringify({ usuario: username, senha: password }));
+        } else {
+          localStorage.removeItem('login-remember');
+        }
 
         toast({
           title: t('login.successTitle'),
@@ -107,46 +132,56 @@ export default function Login() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-[#f5f7fb] via-[#f3f6fa] to-[#eef2f7]">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-10">
-          <header className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <img
-                src={biometriaLogo}
-                alt={t('login.logoAlt')}
-                className="h-10 w-10 object-contain"
-              />
-              <div>
-                <p className="text-sm font-semibold text-slate-900">{t('login.title')}</p>
-                <p className="text-xs text-slate-600">{t('login.subtitle')}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-44">
-                <Select value={idioma} onValueChange={handleIdiomaChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('login.languagePlaceholder')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pt-BR">Português (Brasil)</SelectItem>
-                    <SelectItem value="en-US">English (US)</SelectItem>
-                    <SelectItem value="es-ES">Español</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <ConnectivityIndicator />
-            </div>
-          </header>
+      <div className="min-h-screen bg-gradient-to-br from-[#eef2f7] via-[#f3f6fa] to-[#edf0f5]">
+        <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col lg:flex-row">
+          <div className="relative hidden w-1/2 overflow-hidden lg:flex">
+            <img
+              src={babyHandsIllustration}
+              alt={t('login.logoAlt')}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/5 via-slate-900/10 to-slate-900/20" />
+          </div>
 
-          <div className="grid w-full gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-            <Card className="border border-slate-200 bg-white/95 shadow-xl">
-              <CardHeader className="space-y-2">
-                <CardTitle className="text-2xl font-semibold text-slate-900">
-                  {t('login.title')}
-                </CardTitle>
-                <CardDescription className="text-sm text-slate-600">
-                  {t('login.subtitle')}
-                </CardDescription>
+          <div className="flex w-full flex-1 items-center justify-center px-6 py-10 lg:w-1/2">
+            <Card className="w-full max-w-lg border border-slate-200 bg-white shadow-2xl">
+              <CardHeader className="space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={biometriaLogo}
+                      alt={t('login.logoAlt')}
+                      className="h-10 w-10 object-contain"
+                    />
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">{t('login.title')}</p>
+                      <p className="text-xs text-slate-600">{t('login.subtitle')}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-40">
+                      <Select value={idioma} onValueChange={handleIdiomaChange}>
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('login.languagePlaceholder')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pt-BR">Português (Brasil)</SelectItem>
+                          <SelectItem value="en-US">English (US)</SelectItem>
+                          <SelectItem value="es-ES">Español</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <ConnectivityIndicator />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <CardTitle className="text-3xl font-semibold text-slate-900">
+                    Bem-vindo ao Portal
+                  </CardTitle>
+                  <CardDescription className="text-sm text-slate-600">
+                    {t('login.subtitle')}
+                  </CardDescription>
+                </div>
               </CardHeader>
 
               <form onSubmit={handleLogin} noValidate>
@@ -154,7 +189,7 @@ export default function Login() {
                   <div className="space-y-2">
                     <Label htmlFor="usuario" className="text-sm text-slate-700">{t('login.emailLabel')}</Label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" aria-hidden />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" aria-hidden />
                       <Input
                         id="usuario"
                         ref={usuarioRef}
@@ -162,7 +197,7 @@ export default function Login() {
                         placeholder={t('login.emailPlaceholder')}
                         value={usuario}
                         onChange={(e) => setUsuario(e.target.value)}
-                        className="h-12 pl-10 bg-slate-50 border-slate-200 focus-visible:ring-primary focus-visible:ring-offset-0"
+                        className="h-12 pl-10 bg-slate-50 border-slate-200 text-slate-800 shadow-sm transition focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
                         autoComplete="username"
                         aria-label={t('login.emailLabel')}
                         required
@@ -173,7 +208,7 @@ export default function Login() {
                   <div className="space-y-2">
                     <Label htmlFor="senha" className="text-sm text-slate-700">{t('login.passwordLabel')}</Label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" aria-hidden />
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" aria-hidden />
                       <Input
                         id="senha"
                         ref={senhaRef}
@@ -181,7 +216,7 @@ export default function Login() {
                         placeholder={t('login.passwordPlaceholder')}
                         value={senha}
                         onChange={(e) => setSenha(e.target.value)}
-                        className="h-12 pl-10 pr-12 bg-slate-50 border-slate-200 focus-visible:ring-primary focus-visible:ring-offset-0"
+                        className="h-12 pl-10 pr-12 bg-slate-50 border-slate-200 text-slate-800 shadow-sm transition focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
                         autoComplete="current-password"
                         aria-label={t('login.passwordLabel')}
                         required
@@ -191,57 +226,55 @@ export default function Login() {
                         onClick={() => setShowPassword(!showPassword)}
                         aria-label={showPassword ? t('login.hidePassword') : t('login.showPassword')}
                         aria-pressed={showPassword}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 transition"
                       >
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={() => setForgotPasswordOpen(true)}
+                        className="text-sm text-primary hover:underline font-medium"
+                      >
+                        {t('login.forgotPassword')}
                       </button>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <button
-                      type="button"
-                      onClick={() => setForgotPasswordOpen(true)}
-                      className="text-sm text-primary hover:underline font-medium"
-                    >
-                      {t('login.forgotPassword')}
-                    </button>
-                    <p className="text-xs text-slate-500">{t('login.offlineHint')}</p>
+                    <label className="flex items-center gap-2 text-sm text-slate-600">
+                      <Checkbox
+                        checked={rememberCredentials}
+                        onCheckedChange={(checked) => {
+                          const value = checked === true;
+                          setRememberCredentials(value);
+                          if (!value) {
+                            localStorage.removeItem('login-remember');
+                          }
+                        }}
+                        aria-label={t('login.rememberMe')}
+                      />
+                      {t('login.rememberMe')}
+                    </label>
                   </div>
+                  <div className="flex items-center gap-2 text-xs text-slate-600">
+                    <ShieldCheck className="h-4 w-4 text-slate-500" />
+                    <span>{t('login.rememberWarning')}</span>
+                  </div>
+                  <p className="text-xs text-slate-500">{t('login.offlineHint')}</p>
                 </CardContent>
 
                 <CardFooter className="flex flex-col gap-3 pt-0">
                   <Button
                     type="submit"
-                    className="w-full h-12 bg-[#0c63d4] hover:bg-[#0b58bf] text-white font-semibold shadow-md transition-colors"
+                    className="w-full h-12 rounded-xl bg-gradient-to-r from-[#0c63d4] to-[#0b58bf] text-white font-semibold shadow-md transition-all hover:brightness-110"
                     disabled={loading || !isFormValid}
                   >
                     {loading ? t('login.loggingIn') : t('login.loginButton')}
                   </Button>
                 </CardFooter>
               </form>
-            </Card>
-
-            <Card className="border border-slate-200 bg-white/90 shadow-lg">
-              <CardHeader className="space-y-1">
-                <CardTitle className="text-lg font-semibold text-slate-900">{t('login.testAccessTitle')}</CardTitle>
-                <CardDescription className="text-xs text-slate-600">
-                  {t('login.testAccessDescription')}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center justify-between rounded-md border border-slate-200 bg-white px-3 py-2 text-xs">
-                  <span className="font-semibold text-slate-800">{t('login.testAccessAdmin')}</span>
-                  <span className="font-mono text-[11px] text-slate-600">{t('login.testAccessAdminCreds')}</span>
-                </div>
-                <div className="flex items-center justify-between rounded-md border border-slate-200 bg-white px-3 py-2 text-xs">
-                  <span className="font-semibold text-slate-800">{t('login.testAccessCollector')}</span>
-                  <span className="font-mono text-[11px] text-slate-600">{t('login.testAccessCollectorCreds')}</span>
-                </div>
-                <p className="text-[11px] text-slate-500">
-                  {t('login.testAccessNote')}
-                </p>
-              </CardContent>
             </Card>
           </div>
         </div>

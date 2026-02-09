@@ -15,6 +15,7 @@ import { formatCPF, validateCPF } from '@/lib/cpf';
 import { dateDDMMYYYYToISO, dateISOToDDMMYYYY } from '@/lib/utils';
 import { Eye, EyeOff } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { enqueueSyncItem } from '@/lib/sync';
 
 export default function UsuariosEditar() {
   const { id } = useParams();
@@ -133,6 +134,15 @@ export default function UsuariosEditar() {
       if (senha) updateData.senha = senha;
 
       await db.usuarios.update(Number(id), updateData);
+      const usuarioAtualizado = await db.usuarios.get(Number(id));
+      if (usuarioAtualizado) {
+        await enqueueSyncItem({
+          tipo: 'USUARIO',
+          table: 'usuarios',
+          data: usuarioAtualizado,
+          prioridade: 1
+        });
+      }
 
       toast({
         title: t('usersEdit.successTitle'),

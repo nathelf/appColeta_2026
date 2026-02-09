@@ -14,6 +14,7 @@ import { db } from '@/lib/db';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { enqueueSyncItem } from '@/lib/sync';
 
 export default function Formulario() {
   const { id } = useParams();
@@ -72,7 +73,7 @@ export default function Formulario() {
     }
 
     try {
-      await db.formsColeta.add({
+      const formId = await db.formsColeta.add({
         uuid: crypto.randomUUID(),
         sessaoColetaId: Number(id),
         temperatura: parseFloat(temperatura),
@@ -96,10 +97,30 @@ export default function Formulario() {
         createdAt: new Date()
       });
 
+      const form = await db.formsColeta.get(formId);
+      if (form) {
+        await enqueueSyncItem({
+          tipo: 'FORMULARIO',
+          table: 'forms_coleta',
+          data: form,
+          prioridade: 3
+        });
+      }
+
       await db.sessoesColeta.update(Number(id), {
         status: 'CONCLUIDA',
-        dataFim: new Date()
+        dataFim: new Date(),
+        syncStatus: 'PENDENTE'
       });
+      const sessao = await db.sessoesColeta.get(Number(id));
+      if (sessao) {
+        await enqueueSyncItem({
+          tipo: 'SESSAO',
+          table: 'sessoes_coleta',
+          data: sessao,
+          prioridade: 2
+        });
+      }
 
       toast({
         title: t('form.successTitle'),

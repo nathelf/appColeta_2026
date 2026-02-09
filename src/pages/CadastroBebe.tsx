@@ -9,6 +9,7 @@ import { PageHeader } from '@/components/PageHeader';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/db';
 import { getAuthUser } from '@/lib/auth';
+import { enqueueSyncItem } from '@/lib/sync';
 import { TimePickerScroll } from '@/components/TimePickerScroll';
 import { useTranslation } from 'react-i18next';
 import { dateDDMMYYYYToISO } from '@/lib/utils';
@@ -69,14 +70,25 @@ export default function CadastroBebe() {
       }
 
       const bebeId = await db.bebes.add({
+        uuid: crypto.randomUUID(),
         maeId,
         nome: nomeBebe || undefined,
         dataNascimento: dataNasc,
         createdAt: new Date()
       });
+      const bebe = await db.bebes.get(bebeId);
+      if (bebe) {
+        await enqueueSyncItem({
+          tipo: 'BEBE',
+          table: 'bebes',
+          data: bebe,
+          prioridade: 1
+        });
+      }
 
       // Criar sessão de coleta
       const sessaoId = await db.sessoesColeta.add({
+        uuid: crypto.randomUUID(),
         usuarioId: user!.id,
         maeId,
         bebeId,
@@ -88,6 +100,15 @@ export default function CadastroBebe() {
         syncStatus: 'PENDENTE',
         createdAt: new Date()
       });
+      const sessao = await db.sessoesColeta.get(sessaoId);
+      if (sessao) {
+        await enqueueSyncItem({
+          tipo: 'SESSAO',
+          table: 'sessoes_coleta',
+          data: sessao,
+          prioridade: 2
+        });
+      }
 
       // Limpar session storage
       sessionStorage.removeItem('mae_id');

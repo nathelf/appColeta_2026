@@ -139,7 +139,7 @@ export interface LoginEvento {
 
 export interface SyncQueue {
   id?: number;
-  tipo: 'SESSAO' | 'DEDO' | 'FORMULARIO' | 'IMAGEM' | 'AUDITORIA' | 'LOGIN_EVENTO';
+  tipo: 'SESSAO' | 'DEDO' | 'FORMULARIO' | 'IMAGEM' | 'AUDITORIA' | 'LOGIN_EVENTO' | 'MAE' | 'BEBE' | 'USUARIO' | 'SCANNER' | 'ARQUIVO_REFERENCIA';
   payload: string; // JSON stringified
   prioridade: number; // 1 = highest
   tentativas: number;

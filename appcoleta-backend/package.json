@@ -1,0 +1,21 @@
+{
+  "name": "appcoleta-backend",
+  "version": "1.0.0",
+  "description": "Backend do sistema AppColeta",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:backend": "cmd /c node server.js",
+    "start:backend:3002": "cmd /c \"set PORT=3002 && node server.js\"",
+    "db:init": "node scripts/createUsuariosTable.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.18.0"
+  }
+}

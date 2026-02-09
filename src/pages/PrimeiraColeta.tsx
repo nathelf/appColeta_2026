@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { PageHeader } from '@/components/PageHeader';
 import { useToast } from '@/hooks/use-toast';
 import { db } from '@/lib/db';
+import { enqueueSyncItem } from '@/lib/sync';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { formatCPF, validateCPF } from '@/lib/cpf';
 import { useTranslation } from 'react-i18next';
@@ -103,12 +104,21 @@ export default function PrimeiraColeta() {
         }
 
         const maeId = await db.maes.add({
+          uuid: crypto.randomUUID(),
           nome: nomeMae.trim(),
           cpf: cpfNumeros || undefined,
           rg: rg || undefined,
           createdAt: new Date()
         });
         mae = await db.maes.get(maeId);
+        if (mae) {
+          await enqueueSyncItem({
+            tipo: 'MAE',
+            table: 'maes',
+            data: mae,
+            prioridade: 1
+          });
+        }
       }
 
       sessionStorage.setItem('mae_id', mae!.id!.toString());

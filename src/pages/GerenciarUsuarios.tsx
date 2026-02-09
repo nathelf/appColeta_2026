@@ -21,6 +21,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useTranslation } from 'react-i18next';
+import { enqueueSyncItem } from '@/lib/sync';
 
 export default function GerenciarUsuarios() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -53,6 +54,15 @@ export default function GerenciarUsuarios() {
   const handleToggleStatus = async (id: number, currentStatus: boolean) => {
     try {
       await db.usuarios.update(id, { ativo: !currentStatus, updatedAt: new Date() });
+      const usuarioAtualizado = await db.usuarios.get(id);
+      if (usuarioAtualizado) {
+        await enqueueSyncItem({
+          tipo: 'USUARIO',
+          table: 'usuarios',
+          data: usuarioAtualizado,
+          prioridade: 1
+        });
+      }
       toast({
         title: t('usersManage.status.toastTitle'),
         description: t('usersManage.status.toastDescription', { status: !currentStatus ? t('users.status.active') : t('users.status.inactive') }),
