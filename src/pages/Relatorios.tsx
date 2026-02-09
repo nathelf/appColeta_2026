@@ -100,22 +100,21 @@ export default function Relatorios() {
 
         <Card>
           <CardHeader>
-            <CardTitle>{t('reports.topOperators')}</CardTitle>
+            <CardTitle>{t('reports.topCollectors')}</CardTitle>
             <CardDescription>{t('reports.sessionsThisMonth')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {[
-                { nome: t('reports.operators.operator'), sessoes: 45 },
-                { nome: t('reports.operators.admin'), sessoes: 32 },
-                { nome: t('reports.operators.supervisor'), sessoes: 28 }
-              ].map((operador, i) => (
+                { nome: t('reports.operators.collector'), sessoes: 45 },
+                { nome: t('reports.operators.admin'), sessoes: 32 }
+              ].map((item, i) => (
                 <div key={i} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{operador.nome}</span>
+                    <span className="text-sm">{item.nome}</span>
                   </div>
-                  <span className="font-medium">{operador.sessoes}</span>
+                  <span className="font-medium">{item.sessoes}</span>
                 </div>
               ))}
             </div>

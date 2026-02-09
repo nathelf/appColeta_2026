@@ -2,8 +2,7 @@ import { AuthUser } from "@/lib/auth";
 
 export type UserPerfil =
   | "ADMINISTRADOR"
-  | "OPERADOR"
-  | "SUPERVISOR";
+  | "COLETISTA";
 
 /**
  * Permissões por rota
@@ -12,7 +11,7 @@ export const ROUTE_PERMISSIONS: Record<
   string,
   UserPerfil[]
 > = {
-  "/dashboard": ["ADMINISTRADOR", "OPERADOR", "SUPERVISOR"],
+  "/dashboard": ["ADMINISTRADOR", "COLETISTA"],
 
   "/usuarios": ["ADMINISTRADOR"],
   "/usuarios/novo": ["ADMINISTRADOR"],
@@ -21,7 +20,7 @@ export const ROUTE_PERMISSIONS: Record<
   "/auditoria": ["ADMINISTRADOR"],
   "/login-eventos": ["ADMINISTRADOR"],
 
-  "/sincronizacao": ["ADMINISTRADOR", "SUPERVISOR"],
+  "/sincronizacao": ["ADMINISTRADOR", "COLETISTA"],
 
   "/configuracoes": ["ADMINISTRADOR"],
 };
@@ -47,6 +46,6 @@ export function hasPermission(
     ROUTE_PERMISSIONS[match];
 
   return allowed.includes(
-    user.perfil || "OPERADOR"
+    (user.perfil as UserPerfil) || "COLETISTA"
   );
 }

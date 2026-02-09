@@ -27,7 +27,7 @@ export default function UsuariosEditar() {
   const [cpf, setCpf] = useState('');
   const [usuario, setUsuario] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
-  const [perfil, setPerfil] = useState<'ADMINISTRADOR' | 'OPERADOR' | 'SUPERVISOR'>('OPERADOR');
+  const [perfil, setPerfil] = useState<'ADMINISTRADOR' | 'COLETISTA'>('COLETISTA');
   const [ativo, setAtivo] = useState(true);
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
@@ -51,7 +51,7 @@ export default function UsuariosEditar() {
               : usuarioData.dataNascimento)
             : '';
           setDataNascimento(dataFormatada);
-          setPerfil(usuarioData.perfil);
+          setPerfil(usuarioData.perfil === 'ADMINISTRADOR' ? 'ADMINISTRADOR' : 'COLETISTA');
           setAtivo(usuarioData.ativo);
         }
       } catch (error) {
@@ -238,8 +238,7 @@ export default function UsuariosEditar() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ADMINISTRADOR">{t('users.profiles.admin')}</SelectItem>
-                  <SelectItem value="SUPERVISOR">{t('users.profiles.supervisor')}</SelectItem>
-                  <SelectItem value="OPERADOR">{t('users.profiles.operator')}</SelectItem>
+                  <SelectItem value="COLETISTA">{t('users.profiles.collector')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

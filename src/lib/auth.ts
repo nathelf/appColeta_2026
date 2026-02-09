@@ -37,7 +37,11 @@ export function getAuthUser(): User | null {
   const json = localStorage.getItem(USER_KEY);
   if (!json) return null;
   try {
-    return JSON.parse(json);
+    const user = JSON.parse(json);
+    if (user && user.perfil && user.perfil !== "ADMINISTRADOR" && user.perfil !== "COLETISTA") {
+      user.perfil = "COLETISTA";
+    }
+    return user;
   } catch {
     return null;
   }
@@ -94,8 +98,8 @@ export function getTermoAceito(): boolean {
 
 export async function login(email: string, senha: string) {
   try {
-    // URL apontando para o seu backend local
-    const response = await fetch("http://localhost:3001/auth/login", {
+    // Usa a mesma origem do frontend, passando pelo proxy /auth do Vite
+    const response = await fetch("/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,9 +113,10 @@ export async function login(email: string, senha: string) {
       throw new Error(data.error || "Erro ao fazer login");
     }
 
-    // Salva sessão automaticamente
+    // Salva sessão automaticamente (normaliza perfil: só ADMINISTRADOR ou COLETISTA)
     if (data.usuario && data.token) {
-      setAuthUser(data.usuario, data.token);
+      const perfil = data.usuario.perfil === "ADMINISTRADOR" ? "ADMINISTRADOR" : "COLETISTA";
+      setAuthUser({ ...data.usuario, perfil }, data.token);
     }
 
     return data;

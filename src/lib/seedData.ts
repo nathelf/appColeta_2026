@@ -26,11 +26,11 @@ export async function seedDatabase() {
       updatedAt: new Date()
     });
 
-    const operadorId = await db.usuarios.add({
+    const coletistaId = await db.usuarios.add({
       uuid: crypto.randomUUID(),
-      nome: 'Operador Coleta',
-      email: 'operador@biometria.com',
-      perfil: 'OPERADOR',
+      nome: 'Coletista',
+      email: 'coletista@biometria.com',
+      perfil: 'COLETISTA',
       ativo: true,
       createdAt: new Date(),
       updatedAt: new Date()
@@ -86,7 +86,7 @@ export async function seedDatabase() {
 
     const sessaoEmAndamento = await db.sessoesColeta.add({
       uuid: crypto.randomUUID(),
-      usuarioId: operadorId,
+      usuarioId: coletistaId,
       maeId: maeId,
       bebeId: bebeId,
       scannerId: scannerId,
@@ -100,7 +100,7 @@ export async function seedDatabase() {
 
     const sessaoConcluida = await db.sessoesColeta.add({
       uuid: crypto.randomUUID(),
-      usuarioId: operadorId,
+      usuarioId: coletistaId,
       maeId: maeId,
       bebeId: bebeId,
       scannerId: scannerId,

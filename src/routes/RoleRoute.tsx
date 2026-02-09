@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { getAuthUser } from "@/lib/auth";
-import { hasRoutePermission } from "./permissions";
+import { hasPermission } from "./permissions";
 
 interface Props {
   children: ReactNode;
@@ -18,17 +18,17 @@ export function RoleRoute({ children }: Props) {
     return <Navigate to="/login" replace />;
   }
 
-  const allowed = hasRoutePermission(
+  const allowed = hasPermission(
     user,
     location.pathname
   );
 
   if (!allowed) {
-    // Redireciona operador para dashboard limitado
-    if (user.perfil === "OPERADOR") {
+    // Redireciona coletista para dashboard limitado
+    if (user.perfil === "COLETISTA") {
       return (
         <Navigate
-          to="/dashboard-operador"
+          to="/dashboard-coletista"
           replace
         />
       );

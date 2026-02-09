@@ -31,11 +31,12 @@ export default function GerenciarUsuariosModal({ onClose }: GerenciarUsuariosMod
   const getProfileLabel = (perfil: string) => {
     const map: Record<string, string> = {
       ADMINISTRADOR: 'users.profiles.admin',
-      OPERADOR: 'users.profiles.operator',
-      SUPERVISOR: 'users.profiles.supervisor',
+      COLETISTA: 'users.profiles.collector',
+      OPERADOR: 'users.profiles.collector',
+      SUPERVISOR: 'users.profiles.collector',
     };
-    const key = map[perfil];
-    return key ? t(key) : perfil;
+    const key = map[perfil] || 'users.profiles.collector';
+    return t(key);
   };
   
   const [searchTerm, setSearchTerm] = useState('');
@@ -262,8 +263,7 @@ export default function GerenciarUsuariosModal({ onClose }: GerenciarUsuariosMod
           <SelectContent>
             <SelectItem value="TODOS">{t('users.filters.allProfiles')}</SelectItem>
             <SelectItem value="ADMINISTRADOR">{t('users.profiles.admin')}</SelectItem>
-            <SelectItem value="OPERADOR">{t('users.profiles.operator')}</SelectItem>
-            <SelectItem value="SUPERVISOR">{t('users.profiles.supervisor')}</SelectItem>
+          <SelectItem value="COLETISTA">{t('users.profiles.collector')}</SelectItem>
           </SelectContent>
         </Select>
 

@@ -86,7 +86,7 @@ function AppSidebar() {
       group: t('menu.system'),
       items: [
         { title: t('menu.sync'), url: '/sincronizacao', icon: Clock },
-        { title: t('menu.settings'), url: '/configuracoes', icon: Settings }
+        ...(isAdmin ? [{ title: t('menu.settings'), url: '/configuracoes', icon: Settings }] : [])
       ]
     }
   ];
@@ -159,6 +159,7 @@ function AppSidebar() {
 function MobileBottomNav() {
   const location = useLocation();
   const { t } = useTranslation();
+  const isAdmin = useIsAdmin();
 
   const handleLogout = () => {
     localStorage.removeItem('authUser');
@@ -169,7 +170,7 @@ function MobileBottomNav() {
     { title: t('menu.dashboard'), url: '/dashboard', icon: LayoutDashboard },
     { title: t('menu.collection'), url: '/coleta/primeira', icon: Fingerprint },
     { title: t('menu.sync'), url: '/sincronizacao', icon: Clock },
-    { title: t('menu.config'), url: '/configuracoes', icon: Settings }
+    ...(isAdmin ? [{ title: t('menu.config'), url: '/configuracoes', icon: Settings }] : [])
   ];
 
   return (
@@ -306,11 +307,13 @@ export function AppLayout({ children }: AppLayoutProps) {
                                 url: '/sincronizacao',
                                 icon: Clock
                               },
-                              {
-                                title: t('menu.settings'),
-                                url: '/configuracoes',
-                                icon: Settings
-                              }
+                              ...(isAdmin
+                                ? [{
+                                    title: t('menu.settings'),
+                                    url: '/configuracoes',
+                                    icon: Settings
+                                  }]
+                                : [])
                             ]
                           }
 

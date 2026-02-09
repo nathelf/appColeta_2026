@@ -21,7 +21,7 @@ export default function UsuariosNovo() {
 
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
-  const [perfil, setPerfil] = useState<'ADMINISTRADOR' | 'OPERADOR' | 'SUPERVISOR'>('OPERADOR');
+  const [perfil, setPerfil] = useState<'ADMINISTRADOR' | 'COLETISTA'>('COLETISTA');
   const [ativo, setAtivo] = useState(true);
 
   const handleSalvar = async () => {
@@ -119,8 +119,7 @@ export default function UsuariosNovo() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ADMINISTRADOR">{t('users.profiles.admin')}</SelectItem>
-                  <SelectItem value="SUPERVISOR">{t('users.profiles.supervisor')}</SelectItem>
-                  <SelectItem value="OPERADOR">{t('users.profiles.operator')}</SelectItem>
+                  <SelectItem value="COLETISTA">{t('users.profiles.collector')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

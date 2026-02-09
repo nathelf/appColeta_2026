@@ -25,7 +25,7 @@ async function createUsuariosTable() {
       cpf TEXT,
       data_nascimento DATE,
       senha TEXT,
-      perfil TEXT NOT NULL DEFAULT 'OPERADOR',
+      perfil TEXT NOT NULL DEFAULT 'COLETISTA',
       admin BOOLEAN NOT NULL DEFAULT false,
       ativo BOOLEAN NOT NULL DEFAULT true,
       created_at TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -48,7 +48,10 @@ async function createUsuariosTable() {
   await pool.query(`
     UPDATE usuarios
     SET uuid = COALESCE(uuid, gen_random_uuid()),
-        perfil = COALESCE(perfil, 'OPERADOR'),
+        perfil = CASE
+          WHEN COALESCE(perfil, 'COLETISTA') IN ('OPERADOR', 'SUPERVISOR') THEN 'COLETISTA'
+          ELSE COALESCE(perfil, 'COLETISTA')
+        END,
         admin = COALESCE(admin, false),
         ativo = COALESCE(ativo, true),
         created_at = COALESCE(created_at, NOW()),
@@ -63,7 +66,7 @@ async function createUsuariosTable() {
   `);
 
   await pool.query(`ALTER TABLE usuarios ALTER COLUMN uuid SET DEFAULT gen_random_uuid();`);
-  await pool.query(`ALTER TABLE usuarios ALTER COLUMN perfil SET DEFAULT 'OPERADOR';`);
+  await pool.query(`ALTER TABLE usuarios ALTER COLUMN perfil SET DEFAULT 'COLETISTA';`);
   await pool.query(`ALTER TABLE usuarios ALTER COLUMN admin SET DEFAULT false;`);
   await pool.query(`ALTER TABLE usuarios ALTER COLUMN ativo SET DEFAULT true;`);
   await pool.query(`ALTER TABLE usuarios ALTER COLUMN created_at SET DEFAULT NOW();`);

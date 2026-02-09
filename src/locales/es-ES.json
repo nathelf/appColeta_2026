@@ -595,8 +595,7 @@
     },
     "profiles": {
       "admin": "Administrador",
-      "operator": "Operador",
-      "supervisor": "Supervisor"
+      "collector": "Recolector"
     },
     "table": {
       "name": "Nombre",
@@ -802,12 +801,11 @@
     "sessionsByType": "Sesiones por Tipo",
     "last30Days": "Distribución en los últimos 30 días",
     "sessionsByTypeValue": "{{count}} ({{percent}}%)",
-    "topOperators": "Operadores Más Activos",
+    "topCollectors": "Colectores Más Activos",
     "sessionsThisMonth": "Sesiones realizadas este mes",
     "operators": {
-      "operator": "Operador de Recolección",
-      "admin": "Administrador del Sistema",
-      "supervisor": "Supervisor Principal"
+      "collector": "Recolector",
+      "admin": "Administrador del Sistema"
     },
     "sessionsChart": "Gráfico de Sesiones",
     "last7Days": "Últimos 7 días",

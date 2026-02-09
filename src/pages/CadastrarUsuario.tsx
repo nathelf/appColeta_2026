@@ -114,7 +114,7 @@ export default function CadastrarUsuario() {
         uuid: crypto.randomUUID(),
         nome,
         email: usuario,
-        perfil: 'OPERADOR',
+        perfil: 'COLETISTA',
         ativo: status === 'ATIVO',
         dataNascimento: dataNascimentoISO || undefined,
         createdAt: new Date(),

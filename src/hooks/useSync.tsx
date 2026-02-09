@@ -4,7 +4,8 @@ import { useToast } from './use-toast';
 import { db, SyncQueue } from '@/lib/db';
 import { getAuthUser } from '@/lib/auth';
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001').replace(/\/$/, '');
+// Usa mesma origem do frontend (Vite em dev faz proxy para o backend)
+const API_BASE_URL = '';
 
 const camelToSnake = (value: string) =>
   value.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);

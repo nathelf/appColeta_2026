@@ -36,7 +36,7 @@ import Auditoria from "./pages/Auditoria";
 import LoginEventos from "./pages/LoginEventos";
 import Configuracoes from "./pages/Configuracoes";
 import NotFound from "./pages/NotFound";
-import DashboardOperador from "./pages/DashboardOperador";
+import DashboardColetista from "./pages/DashboardColetista";
 
 import { seedDatabase } from "./lib/seedData";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
@@ -76,12 +76,12 @@ const App = () => {
                 element={<TermoDeUso />}
               />
 
-              {/* Dashboard operador */}
+              {/* Dashboard coletista */}
               <Route
-                path="/dashboard-operador"
+                path="/dashboard-coletista"
                 element={
                   <ProtectedRoute>
-                    <DashboardOperador />
+                    <DashboardColetista />
                   </ProtectedRoute>
                 }
               />

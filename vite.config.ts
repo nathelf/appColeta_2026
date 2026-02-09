@@ -9,9 +9,31 @@ export default defineConfig(({ mode }) => {
 
   return {
     server: {
-      host: "::",
-      port: 8080,
+  host: "0.0.0.0",   // aceita qualquer origem externa
+  port: 8080,
+
+  allowedHosts: [
+    ".trycloudflare.com", // libera qualquer túnel CF
+  ],
+
+  proxy: {
+    "/auth": {
+      target: "http://localhost:3001",
+      changeOrigin: true,
+      secure: false,
     },
+    "/sync": {
+      target: "http://localhost:3001",
+      changeOrigin: true,
+      secure: false,
+    },
+    "/health": {
+      target: "http://localhost:3001",
+      changeOrigin: true,
+      secure: false,
+    },
+  },
+},
 
     plugins: [
       react(),
@@ -21,9 +43,14 @@ export default defineConfig(({ mode }) => {
 
       VitePWA({
         registerType: "autoUpdate",
-        includeAssets: ["favicon.ico", "robots.txt", "icons/*.png", "icons/*.svg"],
+        includeAssets: [
+          "favicon.ico",
+          "robots.txt",
+          "icons/*.png",
+          "icons/*.svg",
+        ],
 
-        // 🚫 Service Worker NUNCA em dev (evita tela branca)
+        // 🚫 Service Worker NUNCA em dev
         devOptions: {
           enabled: false,
         },
@@ -66,13 +93,14 @@ export default defineConfig(({ mode }) => {
         },
 
         workbox: {
-          // 🔥 limpa cache antigo automaticamente
           cleanupOutdatedCaches: true,
           clientsClaim: true,
           skipWaiting: true,
 
           maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-          globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+          globPatterns: [
+            "**/*.{js,css,html,ico,png,svg,woff,woff2}",
+          ],
 
           runtimeCaching: [
             {

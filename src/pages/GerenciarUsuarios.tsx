@@ -32,11 +32,12 @@ export default function GerenciarUsuarios() {
   const getProfileLabel = (perfil: string) => {
     const map: Record<string, string> = {
       ADMINISTRADOR: 'users.profiles.admin',
-      OPERADOR: 'users.profiles.operator',
-      SUPERVISOR: 'users.profiles.supervisor',
+      COLETISTA: 'users.profiles.collector',
+      OPERADOR: 'users.profiles.collector',
+      SUPERVISOR: 'users.profiles.collector',
     };
-    const key = map[perfil];
-    return key ? t(key) : perfil;
+    const key = map[perfil] || 'users.profiles.collector';
+    return t(key);
   };
 
   const usuarios = useLiveQuery(() => {

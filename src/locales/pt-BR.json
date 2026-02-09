@@ -595,8 +595,7 @@
     },
     "profiles": {
       "admin": "Administrador",
-      "operator": "Operador",
-      "supervisor": "Supervisor"
+      "collector": "Coletista"
     },
     "table": {
       "name": "Nome",
@@ -802,12 +801,11 @@
     "sessionsByType": "Sessões por Tipo",
     "last30Days": "Distribuição nos últimos 30 dias",
     "sessionsByTypeValue": "{{count}} ({{percent}}%)",
-    "topOperators": "Operadores Mais Ativos",
+    "topCollectors": "Coletistas Mais Ativos",
     "sessionsThisMonth": "Sessões realizadas este mês",
     "operators": {
-      "operator": "Operador Coleta",
-      "admin": "Administrador Sistema",
-      "supervisor": "Supervisor Principal"
+      "collector": "Coletista",
+      "admin": "Administrador Sistema"
     },
     "sessionsChart": "Gráfico de Sessões",
     "last7Days": "Últimos 7 dias",

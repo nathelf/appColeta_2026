@@ -34,10 +34,10 @@ export function ProtectedRoute({
     requireAdmin &&
     user.perfil !== "ADMINISTRADOR"
   ) {
-    if (user.perfil === "OPERADOR") {
+    if (user.perfil === "COLETISTA") {
       return (
         <Navigate
-          to="/dashboard-operador"
+          to="/dashboard-coletista"
           replace
         />
       );
@@ -58,10 +58,10 @@ export function ProtectedRoute({
   );
 
   if (!allowed) {
-    if (user.perfil === "OPERADOR") {
+    if (user.perfil === "COLETISTA") {
       return (
         <Navigate
-          to="/dashboard-operador"
+          to="/dashboard-coletista"
           replace
         />
       );

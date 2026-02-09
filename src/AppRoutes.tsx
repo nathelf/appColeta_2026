@@ -7,7 +7,7 @@ import { AppLayout } from "@/components/AppLayout";
 
 import Login from "@/pages/login";
 import Dashboard from "@/pages/dashboard";
-import DashboardOperador from "@/pages/dashboard-operador";
+import DashboardColetista from "@/pages/DashboardColetista";
 import Usuarios from "@/pages/usuarios";
 import PrimeiraColeta from "@/pages/coleta-primeira";
 import Recoleta from "@/pages/coleta-recoleta";
@@ -40,10 +40,10 @@ export function AppRoutes() {
           />
 
           <Route
-            path="/dashboard-operador"
+            path="/dashboard-coletista"
             element={
               <RoleRoute>
-                <DashboardOperador />
+                <DashboardColetista />
               </RoleRoute>
             }
           />

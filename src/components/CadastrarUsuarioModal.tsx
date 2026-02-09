@@ -22,7 +22,7 @@ export default function CadastrarUsuarioModal({ onClose }: CadastrarUsuarioModal
   const [dataNascimento, setDataNascimento] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [perfil, setPerfil] = useState<'ADMINISTRADOR' | 'OPERADOR' | 'SUPERVISOR'>('OPERADOR');
+  const [perfil, setPerfil] = useState<'ADMINISTRADOR' | 'COLETISTA'>('COLETISTA');
   const [status, setStatus] = useState<'ATIVO' | 'INATIVO'>('ATIVO');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -142,7 +142,7 @@ export default function CadastrarUsuarioModal({ onClose }: CadastrarUsuarioModal
       setDataNascimento('');
       setSenha('');
       setConfirmarSenha('');
-      setPerfil('OPERADOR');
+      setPerfil('COLETISTA');
       setStatus('ATIVO');
 
       onClose();
@@ -205,14 +205,13 @@ export default function CadastrarUsuarioModal({ onClose }: CadastrarUsuarioModal
 
         <div className="space-y-2">
           <Label htmlFor="perfil">{t('usersCreateModal.fields.profile')}</Label>
-          <Select value={perfil} onValueChange={(value: 'ADMINISTRADOR' | 'OPERADOR' | 'SUPERVISOR') => setPerfil(value)}>
+          <Select value={perfil} onValueChange={(value: 'ADMINISTRADOR' | 'COLETISTA') => setPerfil(value)}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ADMINISTRADOR">{t('users.profiles.admin')}</SelectItem>
-              <SelectItem value="OPERADOR">{t('users.profiles.operator')}</SelectItem>
-              <SelectItem value="SUPERVISOR">{t('users.profiles.supervisor')}</SelectItem>
+              <SelectItem value="COLETISTA">{t('users.profiles.collector')}</SelectItem>
             </SelectContent>
           </Select>
         </div>

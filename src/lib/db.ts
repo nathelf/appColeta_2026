@@ -8,7 +8,7 @@ export interface Usuario {
   email: string;
   cpf?: string;
   dataNascimento?: string;
-  perfil: 'ADMINISTRADOR' | 'OPERADOR' | 'SUPERVISOR';
+  perfil: 'ADMINISTRADOR' | 'COLETISTA';
   ativo: boolean;
   createdAt?: Date;
   updatedAt?: Date;
