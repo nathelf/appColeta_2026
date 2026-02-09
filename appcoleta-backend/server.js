@@ -3,7 +3,7 @@ import cors from "cors";
 import pkg from "pg";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcrypt"; // Note que aqui você usa bcrypt e não bcryptjs
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -139,6 +139,81 @@ app.get("/health", async (_, res) => {
 });
 
 /* =====================================================
+   🔐 LOGIN (ADICIONADO/CORRIGIDO)
+===================================================== */
+
+app.post("/auth/login", async (req, res) => {
+  try {
+    const { email, senha } = req.body;
+    console.log("--- TENTATIVA DE LOGIN ---");
+    console.log("Email recebido:", email);
+
+    if (!email || !senha) {
+      return res.status(400).json({
+        error: "Email e senha são obrigatórios",
+      });
+    }
+
+    // Busca usuário (ignorando maiúsculas/minúsculas)
+    const result = await pool.query(
+      `SELECT * FROM usuarios WHERE LOWER(email) = LOWER($1)`,
+      [email]
+    );
+
+    const user = result.rows[0];
+
+    if (!user) {
+      console.log("ERRO: Usuário não encontrado no banco.");
+      return res.status(404).json({
+        error: "Usuário não encontrado",
+      });
+    }
+
+    // Compara senha
+    const senhaValida = await bcrypt.compare(
+      senha,
+      user.senha
+    );
+
+    if (!senhaValida) {
+      console.log("ERRO: Senha inválida.");
+      return res.status(401).json({
+        error: "Senha inválida",
+      });
+    }
+
+    // Gera token
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        admin: user.admin,
+        perfil: user.perfil,
+      },
+      process.env.JWT_SECRET || "dev_secret",
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN || "8h",
+      }
+    );
+
+    // Remove senha do retorno por segurança
+    delete user.senha;
+
+    console.log("SUCESSO: Login realizado para", user.nome);
+
+    res.json({
+      usuario: user,
+      token,
+    });
+  } catch (err) {
+    console.error("LOGIN ERROR:", err);
+    res.status(500).json({
+      error: "Erro interno no login",
+    });
+  }
+});
+
+/* =====================================================
    🔄 SYNC
 ===================================================== */
 
@@ -227,4 +302,3 @@ app.listen(PORT, () => {
     `🚀 Backend rodando em http://localhost:${PORT}`
   );
 });
-

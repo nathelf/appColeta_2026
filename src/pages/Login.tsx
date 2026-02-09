@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lock, Eye, EyeOff, Mail, ShieldCheck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { validateLogin, setAuthUser, getAuthUser } from '@/lib/auth';
+import { validateLogin, login, setAuthUser } from '@/lib/auth';
 import { ForgotPasswordDialog } from '@/components/ForgotPasswordDialog';
 import { ConnectivityIndicator } from '@/components/ConnectivityIndicator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -72,61 +72,76 @@ export default function Login() {
   };
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const username = usuario.trim();
-    const password = senha;
+  const email = usuario.trim();
+  const password = senha;
 
-    if (!username || !password) {
-      toast({
-        title: t('login.errors.missingFieldsTitle'),
-        description: t('login.errors.missingFieldsDescription'),
-        variant: 'destructive',
-      });
-      return;
-    }
+  // 🔹 Validação local
+  const errors = validateLogin({
+    email,
+    senha: password,
+  });
 
-    setLoading(true);
+  if (errors.email || errors.senha) {
+    toast({
+      title: t('login.errors.invalidTitle'),
+      description: errors.email || errors.senha,
+      variant: 'destructive',
+    });
+    return;
+  }
 
-    try {
-      const result = await validateLogin(username, password);
+  setLoading(true);
 
-      if (result.success && result.user) {
-        setAuthUser(result.user);
-        if (rememberCredentials) {
-          localStorage.setItem('login-remember', JSON.stringify({ usuario: username, senha: password }));
-        } else {
-          localStorage.removeItem('login-remember');
-        }
+  try {
+    // 🔹 Backend
+    const data = await login(email, password);
 
-        toast({
-          title: t('login.successTitle'),
-          description: t('login.successDescription', { name: result.user.name }),
-        });
+    if (data.usuario && data.token) {
+      setAuthUser(data.usuario, data.token);
 
-        // 🔵 AQUI MANTEMOS O QUE VOCÊ PEDIU:
-        navigate('/termo-de-uso', { replace: true });
-
+      if (rememberCredentials) {
+        localStorage.setItem(
+          'login-remember',
+          JSON.stringify({
+            usuario: email,
+            senha: password,
+          })
+        );
       } else {
-        toast({
-          title: t('login.errors.invalidTitle'),
-          description: result.message || t('login.errors.invalidDescription'),
-          variant: 'destructive',
-        });
-
-        setSenha('');
-        senhaRef.current?.focus();
+        localStorage.removeItem('login-remember');
       }
-    } catch (error) {
+
       toast({
-        title: t('login.errors.invalidTitle'),
-        description: t('login.errors.connection'),
-        variant: 'destructive',
+        title: t('login.successTitle'),
+        description: t('login.successDescription', {
+          name: data.usuario.nome,
+        }),
       });
-    } finally {
-      setLoading(false);
+
+      navigate('/termo-de-uso', { replace: true });
+
+    } else {
+      throw new Error('Resposta inválida do servidor');
     }
-  };
+
+  } catch (error: any) {
+    toast({
+      title: t('login.errors.invalidTitle'),
+      description:
+        error.message || t('login.errors.connection'),
+      variant: 'destructive',
+    });
+
+    setSenha('');
+    senhaRef.current?.focus();
+
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const isFormValid = usuario.trim().length > 0 && senha.trim().length > 0;
 
