@@ -519,7 +519,12 @@
       "lastError": "Last Error",
       "createdAt": "Created At",
       "actions": "Actions"
-    }
+    },
+    "updateData": "Update Data",
+    "dataUpdatedTitle": "Data updated",
+    "dataUpdatedDescription": "Server data has been loaded successfully.",
+    "pullErrorTitle": "Error updating",
+    "pullErrorDescription": "Unable to fetch data from the server."
   },
   "sessionTypes": {
     "PRIMEIRA_COLETA": "First Collection",
@@ -585,6 +590,11 @@
     "title": "Manage Users",
     "description": "List, search, and manage existing accounts",
     "new": "New User",
+    "syncButton": "Sync",
+    "syncTitle": "Users synchronized",
+    "syncDescription": "Server data has been loaded successfully.",
+    "syncErrorTitle": "Error synchronizing",
+    "syncErrorDescription": "Unable to fetch users from the server.",
     "searchPlaceholder": "Search by name, login, or CPF...",
     "empty": "No users found",
     "filters": {

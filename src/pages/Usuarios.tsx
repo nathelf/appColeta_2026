@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useNavigate } from 'react-router-dom';
 import { db } from '@/lib/db';
@@ -16,18 +16,38 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { UserPlus, Search, Edit, Trash2, KeyRound, Power, PowerOff, AlertTriangle } from 'lucide-react';
+import { UserPlus, Search, Edit, Trash2, KeyRound, Power, PowerOff, AlertTriangle, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { MoreVertical } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { enqueueSyncItem } from '@/lib/sync';
+import { useSync } from '@/hooks/useSync';
 
 export default function Usuarios() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const currentUser = getAuthUser();
   const { t } = useTranslation();
+  const { pullDataFromServer } = useSync();
+  const [syncing, setSyncing] = useState(false);
+
+  // Sincronizar usuários quando a página carrega
+  useEffect(() => {
+    const syncUsuarios = async () => {
+      setSyncing(true);
+      try {
+        await pullDataFromServer();
+      } catch (error) {
+        console.error('Erro ao sincronizar usuários:', error);
+      } finally {
+        setSyncing(false);
+      }
+    };
+
+    syncUsuarios();
+  }, [pullDataFromServer]);
+
   const getProfileLabel = (perfil: string) => {
     const map: Record<string, string> = {
       ADMINISTRADOR: 'users.profiles.admin',
@@ -49,11 +69,16 @@ export default function Usuarios() {
 
   const usuarios = useLiveQuery(() => db.usuarios.toArray());
 
-  // Filtrar usuários
+  // Filtrar usuários - apenas ADMINISTRADOR e COLETISTA
   const filteredUsuarios = useMemo(() => {
     if (!usuarios) return [];
 
     let filtrados = usuarios;
+
+    // Filtrar apenas ADMINISTRADOR e COLETISTA
+    filtrados = filtrados.filter(u => 
+      u.perfil === 'ADMINISTRADOR' || u.perfil === 'COLETISTA'
+    );
 
     // Busca por nome, login (email) ou CPF
     if (searchTerm) {
@@ -164,7 +189,7 @@ export default function Usuarios() {
         await enqueueSyncItem({
           tipo: 'USUARIO',
           table: 'usuarios',
-          data: usuarioAtualizado,
+          data: usuarioAtualizado as unknown as Record<string, unknown>,
           prioridade: 1
         });
       }
@@ -253,10 +278,33 @@ export default function Usuarios() {
         title={t('users.title')}
         description={t('users.description')}
         actions={
-          <Button onClick={() => navigate('/usuarios/novo')}>
-            <UserPlus className="h-4 w-4 mr-2" />
-            {t('users.new')}
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={async () => {
+              setSyncing(true);
+              try {
+                await pullDataFromServer();
+                toast({
+                  title: t('users.syncTitle', { defaultValue: 'Usuários sincronizados' }),
+                  description: t('users.syncDescription', { defaultValue: 'Dados do servidor foram carregados com sucesso.' })
+                });
+              } catch (error) {
+                toast({
+                  variant: 'destructive',
+                  title: t('users.syncErrorTitle', { defaultValue: 'Erro ao sincronizar' }),
+                  description: t('users.syncErrorDescription', { defaultValue: 'Não foi possível buscar usuários do servidor.' })
+                });
+              } finally {
+                setSyncing(false);
+              }
+            }} disabled={syncing} variant="outline">
+              <RefreshCw className={`h-4 w-4 mr-2 ${syncing ? 'animate-spin' : ''}`} />
+              {t('users.syncButton', { defaultValue: 'Sincronizar' })}
+            </Button>
+            <Button onClick={() => navigate('/usuarios/novo')}>
+              <UserPlus className="h-4 w-4 mr-2" />
+              {t('users.new')}
+            </Button>
+          </div>
         }
       />
 

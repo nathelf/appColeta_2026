@@ -4,8 +4,21 @@ import { useToast } from './use-toast';
 import { db, SyncQueue } from '@/lib/db';
 import { getAuthUser } from '@/lib/auth';
 
-// Usa mesma origem do frontend (Vite em dev faz proxy para o backend)
-const API_BASE_URL = '';
+// Detectar URL do backend: 
+// - Em localhost: usar '' (proxy do Vite)
+// - Em produção/túnel: usar sempre a mesma origin (backend está servindo o frontend estático)
+const getApiBaseUrl = () => {
+  // Se estiver rodando em localhost, usar '' (proxy do Vite em dev)
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return '';
+  }
+  
+  // Em produção (túnel Cloudflare ou outro), todas as requisições vão para a mesma origin
+  // pois o backend está servindo o frontend estático
+  return '';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 const camelToSnake = (value: string) =>
   value.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
@@ -47,6 +60,35 @@ const TYPE_ORDER: Record<SyncQueue['tipo'], number> = {
   FORMULARIO: 3,
   AUDITORIA: 4,
   LOGIN_EVENTO: 4
+};
+
+// Mapear tabelas para stores do Dexie
+const TABLE_STORE_MAP: Record<string, keyof typeof db> = {
+  usuarios: 'usuarios',
+  maes: 'maes',
+  bebes: 'bebes',
+  scanners: 'scanners',
+  arquivos_referencia: 'arquivosReferencia',
+  sessoes_coleta: 'sessoesColeta',
+  dedos_coleta: 'dedosColeta',
+  forms_coleta: 'formsColeta',
+  respostas_quali: 'respostasQuali',
+  auditorias: 'auditorias',
+  login_eventos: 'loginEventos'
+};
+
+// Converter snake_case para camelCase
+const snakeToCamel = (str: string) => {
+  return str.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
+};
+
+const snakeCaseObjectToCamel = (data: Record<string, unknown>) => {
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [
+      snakeToCamel(key),
+      value
+    ])
+  );
 };
 
 export function useSync() {
@@ -203,6 +245,54 @@ export function useSync() {
     return response.json();
   }, [resolvePayload]);
 
+  const pullDataFromServer = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/sync/pull`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao buscar dados do servidor');
+      }
+
+      const result = await response.json();
+      if (!result.ok || !result.data) {
+        throw new Error('Resposta inválida do servidor');
+      }
+
+      // Atualizar cada tabela no IndexedDB
+      for (const [table, records] of Object.entries(result.data)) {
+        const storeName = TABLE_STORE_MAP[table];
+        if (!storeName || !Array.isArray(records)) continue;
+
+        const store = db[storeName] as any;
+        
+        for (const record of records) {
+          const camelRecord = snakeCaseObjectToCamel(record as Record<string, unknown>);
+          try {
+            // UPSERT: tenta atualizar, se não existir insere
+            const existing = await store.where('uuid').equals(camelRecord.uuid).toArray();
+            if (existing.length > 0) {
+              await store.update(existing[0].id, camelRecord);
+            } else {
+              await store.add(camelRecord);
+            }
+          } catch (err) {
+            console.error(`Erro ao atualizar ${table}:`, err);
+          }
+        }
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Erro ao fazer pull do servidor:', error);
+      return false;
+    }
+  }, []);
+
   const syncAll = useCallback(async () => {
     setSyncing(true);
     
@@ -253,6 +343,15 @@ export function useSync() {
           variant: 'destructive',
         });
       }
+
+      // 📥 PULL: Buscar dados atualizados do servidor
+      const pullSuccess = await pullDataFromServer();
+      if (pullSuccess) {
+        toast({
+          title: 'Dados atualizados',
+          description: 'Novos dados do servidor foram carregados.',
+        });
+      }
     } catch (error) {
       await Promise.all(
         queueItems
@@ -273,7 +372,7 @@ export function useSync() {
     } finally {
       setSyncing(false);
     }
-  }, [queueItems, syncBatch, toast, updateQueueItem]);
+  }, [queueItems, syncBatch, toast, updateQueueItem, pullDataFromServer]);
 
   const retryItem = useCallback(async (itemId: number) => {
     const item = queueItems.find(i => i.id === itemId);
@@ -313,5 +412,6 @@ export function useSync() {
     syncItem,
     retryItem,
     discardItem,
+    pullDataFromServer,
   };
 }

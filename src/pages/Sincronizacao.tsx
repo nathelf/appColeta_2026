@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from 'react-i18next';
 
 export default function Sincronizacao() {
-  const { queueItems, pendingCount, errorCount, retryItem, discardItem, syncAll, syncing } = useSync();
+  const { queueItems, pendingCount, errorCount, retryItem, discardItem, syncAll, syncing, pullDataFromServer } = useSync();
   const { toast } = useToast();
   const { t } = useTranslation();
   const getQueueTypeLabel = (tipo: string) =>
@@ -42,6 +42,22 @@ export default function Sincronizacao() {
     await syncAll();
   };
 
+  const handlePullData = async () => {
+    const success = await pullDataFromServer();
+    if (success) {
+      toast({
+        title: t('sync.dataUpdatedTitle', { defaultValue: 'Dados atualizados' }),
+        description: t('sync.dataUpdatedDescription', { defaultValue: 'Dados do servidor foram carregados com sucesso.' })
+      });
+    } else {
+      toast({
+        title: t('sync.pullErrorTitle', { defaultValue: 'Erro ao atualizar' }),
+        description: t('sync.pullErrorDescription', { defaultValue: 'Não foi possível buscar dados do servidor.' }),
+        variant: 'destructive'
+      });
+    }
+  };
+
   return (
     <AppLayout>
       <Breadcrumb items={[{ label: t('sync.title') }]} />
@@ -50,10 +66,16 @@ export default function Sincronizacao() {
         title={t('sync.queueTitle')}
         description={t('sync.queueDescription')}
         actions={
-          <Button onClick={handleRetryAll} disabled={syncing || queueItems.length === 0}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            {t('sync.retryAll')}
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={handlePullData} disabled={syncing} variant="outline">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              {t('sync.updateData', { defaultValue: 'Atualizar Dados' })}
+            </Button>
+            <Button onClick={handleRetryAll} disabled={syncing || queueItems.length === 0}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              {t('sync.retryAll')}
+            </Button>
+          </div>
         }
       />
 

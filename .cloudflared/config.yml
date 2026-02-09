@@ -1,0 +1,7 @@
+tunnel: appcoleta-tunnel
+credentials-file: /path/to/your/.cloudflared/appcoleta-tunnel.json
+
+ingress:
+  - hostname: situations-volunteers-methodology-demands.trycloudflare.com
+    service: http://localhost:3001
+  - service: http_status:404

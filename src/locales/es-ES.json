@@ -519,7 +519,12 @@
       "lastError": "Último Error",
       "createdAt": "Fecha de Creación",
       "actions": "Acciones"
-    }
+    },
+    "updateData": "Actualizar Datos",
+    "dataUpdatedTitle": "Datos actualizados",
+    "dataUpdatedDescription": "Los datos del servidor se han cargado correctamente.",
+    "pullErrorTitle": "Error al actualizar",
+    "pullErrorDescription": "No se pueden obtener datos del servidor."
   },
   "sessionTypes": {
     "PRIMEIRA_COLETA": "Primera Recolección",
@@ -585,6 +590,11 @@
     "title": "Gestionar Usuarios",
     "description": "Listar, buscar y administrar cuentas existentes",
     "new": "Nuevo Usuario",
+    "syncButton": "Sincronizar",
+    "syncTitle": "Usuarios sincronizados",
+    "syncDescription": "Los datos del servidor se han cargado correctamente.",
+    "syncErrorTitle": "Error al sincronizar",
+    "syncErrorDescription": "No se pueden obtener usuarios del servidor.",
     "searchPlaceholder": "Buscar por nombre, login o CPF...",
     "empty": "Ningún usuario encontrado",
     "filters": {

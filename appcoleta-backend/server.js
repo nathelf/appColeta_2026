@@ -51,7 +51,7 @@ app.use(express.json());
    📂 SERVIR FRONT BUILDADO
 ===================================================== */
 
-const distPath = path.join(__dirname, "dist");
+const distPath = path.join(__dirname, "..", "dist");
 
 app.use(express.static(distPath));
 
@@ -382,6 +382,39 @@ app.post("/sync", async (req, res) => {
   }
 
   res.json({ results });
+});
+
+/* =====================================================
+   🔄 SYNC PULL (Retorna dados atualizados do servidor)
+===================================================== */
+
+app.get("/sync/pull", async (req, res) => {
+  try {
+    const data = {};
+
+    // Busca todos os dados de cada tabela
+    for (const [tableKey, cfg] of Object.entries(TABLE_CONFIG)) {
+      try {
+        const result = await pool.query(`SELECT * FROM ${cfg.table}`);
+        data[tableKey] = result.rows;
+      } catch (err) {
+        console.error(`Erro ao buscar ${tableKey}:`, err.message);
+        data[tableKey] = [];
+      }
+    }
+
+    res.json({
+      ok: true,
+      timestamp: new Date().toISOString(),
+      data
+    });
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      error: "Erro ao sincronizar dados do servidor",
+      message: err.message
+    });
+  }
 });
 
 /* =====================================================

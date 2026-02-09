@@ -519,7 +519,12 @@
       "lastError": "Último Erro",
       "createdAt": "Data Criação",
       "actions": "Ações"
-    }
+    },
+    "updateData": "Atualizar Dados",
+    "dataUpdatedTitle": "Dados atualizados",
+    "dataUpdatedDescription": "Dados do servidor foram carregados com sucesso.",
+    "pullErrorTitle": "Erro ao atualizar",
+    "pullErrorDescription": "Não foi possível buscar dados do servidor."
   },
   "sessionTypes": {
     "PRIMEIRA_COLETA": "Primeira Coleta",
@@ -585,6 +590,11 @@
     "title": "Gerenciar Usuários",
     "description": "Listar, buscar e operar sobre contas existentes",
     "new": "Novo Usuário",
+    "syncButton": "Sincronizar",
+    "syncTitle": "Usuários sincronizados",
+    "syncDescription": "Dados do servidor foram carregados com sucesso.",
+    "syncErrorTitle": "Erro ao sincronizar",
+    "syncErrorDescription": "Não foi possível buscar usuários do servidor.",
     "searchPlaceholder": "Buscar por nome, login ou CPF...",
     "empty": "Nenhum usuário encontrado",
     "filters": {
