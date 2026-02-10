@@ -1,73 +1,396 @@
-# Welcome to your Lovable project
+# 📦 Sistema Web Full-Stack — Documentação do Projeto
 
-## Project info
+## 📋 Visão Geral
 
-**URL**: https://lovable.dev/projects/017cd125-2179-4fa1-bd4d-c44834e7cc61
+Este repositório contém uma aplicação **Full-Stack** composta por:
 
-## How can I edit this code?
+* **Frontend:** React + TypeScript + Vite + Tailwind + shadcn-ui
+* **Backend:** Node.js + Express
+* **Banco de Dados:** PostgreSQL
 
-There are several ways of editing your application.
+O sistema permite execução local completa com comunicação via API REST.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/017cd125-2179-4fa1-bd4d-c44834e7cc61) and start prompting.
+# 🏗️ Arquitetura
 
-Changes made via Lovable will be committed automatically to this repo.
+```bash
+project-root/
+│
+├── backend/          # API Node/Express
+│   ├── src/
+│   ├── .env
+│   └── server.js
+│
+├── frontend/         # Aplicação React (Vite)
+│   ├── src/
+│   ├── vite.config.ts
+│   └── package.json
+│
+└── README.md
+```
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+# 🖥️ Pré-requisitos
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Instale na máquina:
 
-Follow these steps:
+* Node.js 18+
+* npm
+* PostgreSQL
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Verificar:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+```bash
+node -v
+npm -v
+psql --version
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# ⚙️ Configuração do Backend
+
+## 1️⃣ Entrar na pasta
+
+```bash
+cd backend
+```
+
+---
+
+## 2️⃣ Instalar dependências
+
+```bash
+npm install
+```
+
+---
+
+## 3️⃣ Criar arquivo `.env`
+
+Crie dentro da pasta `/backend`:
+
+```env
+PORT=3000
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=senha
+DB_NAME=nome_do_banco
+
+JWT_SECRET=seu_token_secreto
+```
+
+---
+
+## 4️⃣ Rodar o servidor
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+ou
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+node server.js
+```
 
-**Use GitHub Codespaces**
+Servidor iniciará em:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+http://localhost:3000
+```
 
-## What technologies are used for this project?
+---
 
-This project is built with:
+# 🗄️ Banco de Dados
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Exemplo de criação no PostgreSQL:
 
-## How can I deploy this project?
+```sql
+CREATE DATABASE nome_do_banco;
+```
 
-Simply open [Lovable](https://lovable.dev/projects/017cd125-2179-4fa1-bd4d-c44834e7cc61) and click on Share -> Publish.
+Restaurar dump ou criar tabelas conforme scripts do projeto.
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+# 🎨 Configuração do Frontend
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 1️⃣ Entrar na pasta
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```bash
+cd frontend
+```
+
+---
+
+## 2️⃣ Instalar dependências
+
+```bash
+npm install
+```
+
+---
+
+## 3️⃣ Configurar URL da API
+
+Criar arquivo:
+
+```bash
+frontend/.env
+```
+
+Conteúdo:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+---
+
+# 🔗 Proxy do Vite (Opcional)
+
+Se quiser evitar CORS no dev, configure no `vite.config.ts`:
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+});
+```
+
+Assim chamadas para:
+
+```ts
+/api/usuarios
+```
+
+irão para o backend.
+
+---
+
+# ▶️ Rodando o Frontend
+
+```bash
+npm run dev
+```
+
+Acesse:
+
+```bash
+http://localhost:5173
+```
+
+---
+
+# 🔄 Fluxo de Execução Local
+
+Ordem recomendada:
+
+1️⃣ Subir banco PostgreSQL
+2️⃣ Subir backend
+
+```bash
+cd backend
+npm run dev
+```
+
+3️⃣ Subir frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+---
+
+# 🏗️ Build de Produção
+
+## Frontend
+
+```bash
+cd frontend
+npm run build
+```
+
+Gera:
+
+```bash
+/frontend/dist
+```
+
+---
+
+## Backend
+
+Normalmente roda direto:
+
+```bash
+node server.js
+```
+
+Ou com PM2:
+
+```bash
+pm2 start server.js
+```
+
+---
+
+# 🌐 Deploy
+
+Pode ser feito em:
+
+* VPS (Ubuntu + Nginx)
+* Vercel (frontend)
+* Railway / Render (backend)
+* Docker
+
+Fluxo comum:
+
+1. Build frontend
+2. Publicar `/dist`
+3. Subir backend
+4. Configurar `.env` produção
+5. Ajustar URL da API
+
+---
+
+# 🔐 Variáveis de Ambiente (Resumo)
+
+Backend `.env`:
+
+```env
+PORT=
+DB_HOST=
+DB_PORT=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+JWT_SECRET=
+```
+
+Frontend `.env`:
+
+```env
+VITE_API_URL=
+```
+
+---
+
+# 🧪 Scripts Disponíveis
+
+## Backend
+
+```bash
+npm run dev     # Dev com nodemon
+npm start       # Produção
+```
+
+## Frontend
+
+```bash
+npm run dev
+npm run build
+npm run preview
+```
+
+---
+
+# 📂 Estrutura Recomendada de API
+
+```bash
+backend/src/
+├── controllers/
+├── routes/
+├── services/
+├── middlewares/
+├── config/
+└── server.js
+```
+
+---
+
+# 🚨 Problemas Comuns
+
+### CORS
+
+Instalar:
+
+```bash
+npm install cors
+```
+
+Usar no backend:
+
+```js
+app.use(cors());
+```
+
+---
+
+### Porta em uso
+
+Trocar no `.env`:
+
+```env
+PORT=3001
+```
+
+---
+
+### Banco não conecta
+
+Verificar:
+
+* Usuário
+* Senha
+* Porta 5432
+* Serviço do PostgreSQL ativo
+
+---
+
+# 👥 Contribuição
+
+```bash
+git checkout -b feature/nome
+git commit -m "feat: descrição"
+git push origin feature/nome
+```
+
+Abrir Pull Request.
+
+---
+
+# 📄 Licença
+
+Definir conforme necessidade do projeto.
+
+---
+
+# 📞 Suporte
+
+Em caso de erro ao subir o ambiente, revise:
+
+* `.env`
+* Portas
+* Banco ativo
+* Dependências instaladas
+
+Persistindo, abrir issue no repositório.
