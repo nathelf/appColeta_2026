@@ -3,11 +3,9 @@
   "outputDirectory": "dist",
   "installCommand": "npm install && npm install --prefix appcoleta-backend",
   "rewrites": [
-    { "source": "/((?!api/|assets/|icons/|favicon|robots).*)", "destination": "/index.html" }
-  ],
-  "functions": {
-    "api/[[...path]].js": {
-      "runtime": "@vercel/node@3"
+    {
+      "source": "/((?!api/|assets/|icons/|favicon|robots).*)",
+      "destination": "/index.html"
     }
-  }
+  ]
 }
