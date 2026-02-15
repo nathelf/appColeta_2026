@@ -153,7 +153,7 @@ async function processItem(item: SyncQueue) {
     }
 
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/sync`,
+      `${import.meta.env.VITE_API_URL || ''}/api/sync`,
       {
         method: 'POST',
         headers: {

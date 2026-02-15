@@ -99,7 +99,7 @@ export function getTermoAceito(): boolean {
 export async function login(email: string, senha: string) {
   try {
     // Usa a mesma origem do frontend, passando pelo proxy /auth do Vite
-    const response = await fetch("/auth/login", {
+    const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

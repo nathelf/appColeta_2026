@@ -1,12 +1,13 @@
 {
-  "routes": [
-    {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|svg|ico|json|webmanifest|woff|woff2))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install && npm install --prefix appcoleta-backend",
+  "rewrites": [
+    { "source": "/((?!api/|assets/|icons/|favicon|robots).*)", "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/[[...path]].js": {
+      "runtime": "@vercel/node@3"
     }
-  ]
+  }
 }

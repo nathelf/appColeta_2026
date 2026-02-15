@@ -127,7 +127,7 @@ export function useSync() {
 
   const sendToApi = useCallback(async (itemId: number, table: string, data: Record<string, unknown>) => {
     const token = getAuthUser()?.token;
-    const response = await fetch(`${API_BASE_URL}/sync`, {
+    const response = await fetch(`${API_BASE_URL}/api/sync`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ export function useSync() {
       return { results: [] };
     }
 
-    const response = await fetch(`${API_BASE_URL}/sync`, {
+    const response = await fetch(`${API_BASE_URL}/api/sync`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -247,7 +247,7 @@ export function useSync() {
 
   const pullDataFromServer = useCallback(async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/sync/pull`, {
+      const response = await fetch(`${API_BASE_URL}/api/sync/pull`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'

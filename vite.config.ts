@@ -17,17 +17,7 @@ export default defineConfig(({ mode }) => {
   ],
 
   proxy: {
-    "/auth": {
-      target: "http://localhost:3001",
-      changeOrigin: true,
-      secure: false,
-    },
-    "/sync": {
-      target: "http://localhost:3001",
-      changeOrigin: true,
-      secure: false,
-    },
-    "/health": {
+    "/api": {
       target: "http://localhost:3001",
       changeOrigin: true,
       secure: false,
