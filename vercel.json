@@ -4,6 +4,10 @@
   "installCommand": "npm install && npm install --prefix appcoleta-backend",
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "/api?path=:path*"
+    },
+    {
       "source": "/((?!api/|assets/|icons/|favicon|robots).*)",
       "destination": "/index.html"
     }
