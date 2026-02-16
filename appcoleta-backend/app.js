@@ -20,10 +20,16 @@ const log = (tag, ...args) => {
   console.log(`[${ts}] [${tag}]`, ...args);
 };
 
+const logError = (tag, err) => {
+  log(tag, "Erro:", err?.message || String(err));
+  if (err?.stack) log(tag, "Stack:", err.stack);
+};
+
 /* =====================================================
    🗃️ DATABASE
 ===================================================== */
 
+log("config", "App carregado. VERCEL:", !!process.env.VERCEL);
 log("config", "DB_HOST:", process.env.DB_HOST ? `${process.env.DB_HOST.slice(0, 15)}...` : "(não definido)");
 log("config", "DB_PORT:", process.env.DB_PORT);
 log("config", "DB_USER:", process.env.DB_USER || "(não definido)");
@@ -114,7 +120,7 @@ app.get("/api/health", async (_, res) => {
     log("health", "Conexão OK. DB time:", r.rows[0].now);
     res.json({ ok: true, databaseTime: r.rows[0].now });
   } catch (e) {
-    log("health", "Erro:", e.message);
+    logError("health", e);
     res.status(500).json({ ok: false, error: e.message });
   }
 });
@@ -142,7 +148,7 @@ app.get("/api/health/detailed", async (_, res) => {
     log("health/detailed", "OK. Usuários:", check.usuariosCount);
   } catch (e) {
     check.database = { ok: false, error: e.message };
-    log("health/detailed", "Erro DB:", e.message);
+    logError("health/detailed", e);
   }
   res.json(check);
 });
@@ -156,7 +162,7 @@ app.get("/api/auth/first-user", async (_, res) => {
     log("first-user", "Count:", count, "hasUsers:", hasUsers);
     res.json({ hasUsers, count });
   } catch (err) {
-    log("first-user", "Erro:", err.message);
+    logError("first-user", err);
     res.status(500).json({
       hasUsers: false,
       error: err.message,
@@ -192,7 +198,7 @@ app.post("/api/auth/register", async (req, res) => {
     res.json({ ok: true, message: "Usuário cadastrado. Faça login." });
   } catch (err) {
     const msg = err?.message || String(err);
-    log("register", "Erro:", msg);
+    logError("register", err);
     res.status(500).json({ error: "Erro ao cadastrar", detail: msg });
   }
 });
@@ -225,7 +231,7 @@ app.post("/api/auth/login", async (req, res) => {
     res.json({ usuario: user, token });
   } catch (err) {
     const msg = err?.message || String(err);
-    log("login", "Erro:", msg);
+    logError("login", err);
     res.status(500).json({
       error: "Erro interno no login",
       detail: msg,

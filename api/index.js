@@ -1,16 +1,28 @@
 /**
  * Vercel Serverless: handler único para /api/*
  * O rewrite /api/:path* -> /api envia path como query; restaurarmos para o Express
+ * O middleware de rewrite DEVE rodar antes do app para corrigir req.url
  */
-import app from "../appcoleta-backend/app.js";
+import express from "express";
+import mainApp from "../appcoleta-backend/app.js";
 
-// Middleware: quando Vercel rewrite envia path como query (?path=auth/login), restaurar req.url
-app.use((req, res, next) => {
+const log = (tag, ...args) => {
+  const ts = new Date().toISOString();
+  console.log(`[${ts}] [${tag}]`, ...args);
+};
+
+const wrapper = express();
+wrapper.use((req, res, next) => {
   const pathParam = req.query.path;
   if (pathParam && typeof pathParam === "string") {
-    req.url = "/api/" + pathParam + (req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "");
+    const queryPart = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+    req.url = "/api/" + pathParam + queryPart;
+    log("vercel-rewrite", req.method, pathParam, "->", req.url);
+  } else {
+    log("vercel-request", req.method, req.url, pathParam ? "" : "(sem path - 404?)");
   }
   next();
 });
+wrapper.use(mainApp);
 
-export default app;
+export default wrapper;

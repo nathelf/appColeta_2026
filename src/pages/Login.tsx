@@ -73,9 +73,17 @@ export default function Login() {
     const check = async () => {
       try {
         const res = await fetch('/api/auth/first-user');
-        const data = await res.json();
+        let data: { hasUsers?: boolean } = {};
+        try {
+          data = await res.json();
+        } catch {
+          console.warn('[Login] first-user: resposta não-JSON. Status:', res.status, 'URL:', res.url);
+          setCanRegisterFirst(true);
+          return;
+        }
         setCanRegisterFirst(data.hasUsers === false);
-      } catch {
+      } catch (err) {
+        console.warn('[Login] first-user falhou:', (err as Error).message);
         setCanRegisterFirst(true);
       }
     };

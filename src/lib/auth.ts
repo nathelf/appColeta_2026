@@ -98,20 +98,23 @@ export function getTermoAceito(): boolean {
 
 export async function login(email: string, senha: string) {
   try {
-    // Usa a mesma origem do frontend, passando pelo proxy /auth do Vite
     const response = await fetch("/api/auth/login", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, senha }),
     });
 
-    const data = await response.json();
+    let data: { error?: string; detail?: string } = {};
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error(`Falha de conexão (HTTP ${response.status}). A API pode estar offline ou retornando HTML em vez de JSON.`);
+    }
 
     if (!response.ok) {
-      const detail = data.detail ? ` (${data.detail})` : "";
-      throw new Error((data.error || "Erro ao fazer login") + detail);
+      const detail = data.detail ? ` ${data.detail}` : "";
+      const statusHint = response.status === 404 ? " Rota não encontrada - verifique rewrites do Vercel." : "";
+      throw new Error((data.error || `Erro HTTP ${response.status}`) + detail + statusHint);
     }
 
     // Salva sessão automaticamente (normaliza perfil: só ADMINISTRADOR ou COLETISTA)
