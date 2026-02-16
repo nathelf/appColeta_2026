@@ -10,13 +10,26 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import path from "path";
 import { fileURLToPath } from "url";
+import crypto from "crypto";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const { Pool } = pkg;
 
+const log = (tag, ...args) => {
+  const ts = new Date().toISOString();
+  console.log(`[${ts}] [${tag}]`, ...args);
+};
+
 /* =====================================================
    🗃️ DATABASE
 ===================================================== */
+
+log("config", "DB_HOST:", process.env.DB_HOST ? `${process.env.DB_HOST.slice(0, 15)}...` : "(não definido)");
+log("config", "DB_PORT:", process.env.DB_PORT);
+log("config", "DB_USER:", process.env.DB_USER || "(não definido)");
+log("config", "DB_NAME:", process.env.DB_NAME || "(não definido)");
+log("config", "DB_SSL:", process.env.DB_SSL);
+log("config", "JWT_SECRET:", process.env.JWT_SECRET ? "definido" : "(não definido)");
 
 const pool = new Pool({
   host: process.env.DB_HOST,
@@ -26,6 +39,8 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
 });
+
+pool.on("error", (err) => log("db-pool", "Pool error:", err.message));
 
 /* =====================================================
    🚀 APP
@@ -94,10 +109,91 @@ const TABLE_CONFIG = {
 
 app.get("/api/health", async (_, res) => {
   try {
+    log("health", "Testando conexão com o banco...");
     const r = await pool.query("SELECT NOW()");
+    log("health", "Conexão OK. DB time:", r.rows[0].now);
     res.json({ ok: true, databaseTime: r.rows[0].now });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    log("health", "Erro:", e.message);
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+app.get("/api/health/detailed", async (_, res) => {
+  const check = {
+    env: {
+      DB_HOST: !!process.env.DB_HOST,
+      DB_PORT: !!process.env.DB_PORT,
+      DB_USER: !!process.env.DB_USER,
+      DB_PASSWORD: !!process.env.DB_PASSWORD,
+      DB_NAME: !!process.env.DB_NAME,
+      DB_SSL: process.env.DB_SSL,
+      JWT_SECRET: !!process.env.JWT_SECRET,
+    },
+    database: null,
+    usuariosCount: null,
+  };
+  try {
+    log("health/detailed", "Testando DB...");
+    const r = await pool.query("SELECT NOW()");
+    check.database = { ok: true, time: r.rows[0].now };
+    const countRes = await pool.query("SELECT COUNT(*) FROM usuarios");
+    check.usuariosCount = parseInt(countRes.rows[0].count, 10);
+    log("health/detailed", "OK. Usuários:", check.usuariosCount);
+  } catch (e) {
+    check.database = { ok: false, error: e.message };
+    log("health/detailed", "Erro DB:", e.message);
+  }
+  res.json(check);
+});
+
+app.get("/api/auth/first-user", async (_, res) => {
+  try {
+    log("first-user", "Verificando se há usuários...");
+    const r = await pool.query("SELECT COUNT(*) FROM usuarios");
+    const count = parseInt(r.rows[0].count, 10);
+    const hasUsers = count > 0;
+    log("first-user", "Count:", count, "hasUsers:", hasUsers);
+    res.json({ hasUsers, count });
+  } catch (err) {
+    log("first-user", "Erro:", err.message);
+    res.status(500).json({
+      hasUsers: false,
+      error: err.message,
+      hint: "Tabela usuarios pode não existir. Execute o script SQL no Supabase.",
+    });
+  }
+});
+
+app.post("/api/auth/register", async (req, res) => {
+  try {
+    const { nome, email, senha } = req.body;
+    if (!nome || !email || !senha) {
+      return res.status(400).json({ error: "Nome, email e senha são obrigatórios" });
+    }
+    if (senha.length < 8) {
+      return res.status(400).json({ error: "Senha deve ter pelo menos 8 caracteres" });
+    }
+    log("register", "Tentando cadastrar primeiro usuário:", email);
+    const countRes = await pool.query("SELECT COUNT(*) FROM usuarios");
+    const count = parseInt(countRes.rows[0].count, 10);
+    if (count > 0) {
+      log("register", "Já existem usuários. Negado.");
+      return res.status(403).json({ error: "Já existem usuários. Peça ao administrador para cadastrá-lo." });
+    }
+    const senhaHash = await bcrypt.hash(senha, 10);
+    const uuid = crypto.randomUUID();
+    await pool.query(
+      `INSERT INTO usuarios (uuid, nome, email, senha, perfil, admin, ativo, created_at, updated_at) 
+       VALUES ($1, $2, LOWER($3), $4, 'ADMINISTRADOR', true, true, NOW(), NOW())`,
+      [uuid, nome.trim(), email.trim(), senhaHash]
+    );
+    log("register", "Primeiro usuário criado com sucesso:", email);
+    res.json({ ok: true, message: "Usuário cadastrado. Faça login." });
+  } catch (err) {
+    const msg = err?.message || String(err);
+    log("register", "Erro:", msg);
+    res.status(500).json({ error: "Erro ao cadastrar", detail: msg });
   }
 });
 
@@ -107,16 +203,33 @@ app.post("/api/auth/login", async (req, res) => {
     if (!email || !senha) {
       return res.status(400).json({ error: "Email e senha são obrigatórios" });
     }
+    log("login", "Tentativa de login:", email);
     const result = await pool.query("SELECT * FROM usuarios WHERE LOWER(email)=LOWER($1)", [email]);
     const user = result.rows[0];
-    if (!user) return res.status(404).json({ error: "Usuário não encontrado" });
+    if (!user) {
+      log("login", "Usuário não encontrado:", email);
+      return res.status(404).json({ error: "Usuário não encontrado" });
+    }
+    if (!user.senha) {
+      log("login", "Usuário sem senha no banco:", email);
+      return res.status(500).json({ error: "Usuário sem senha configurada. Contate o administrador." });
+    }
     const senhaValida = await bcrypt.compare(senha, user.senha);
-    if (!senhaValida) return res.status(401).json({ error: "Senha inválida" });
+    if (!senhaValida) {
+      log("login", "Senha inválida para:", email);
+      return res.status(401).json({ error: "Senha inválida" });
+    }
     const token = jwt.sign({ id: user.id, email: user.email, admin: user.admin, perfil: user.perfil }, process.env.JWT_SECRET || "dev_secret", { expiresIn: "8h" });
     delete user.senha;
+    log("login", "Login OK:", email);
     res.json({ usuario: user, token });
   } catch (err) {
-    res.status(500).json({ error: "Erro interno no login" });
+    const msg = err?.message || String(err);
+    log("login", "Erro:", msg);
+    res.status(500).json({
+      error: "Erro interno no login",
+      detail: msg,
+    });
   }
 });
 

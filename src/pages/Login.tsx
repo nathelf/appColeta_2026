@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Lock, Eye, EyeOff, Mail, ShieldCheck } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Lock, Eye, EyeOff, Mail, ShieldCheck, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { validateLogin, login, setAuthUser } from '@/lib/auth';
 import { ForgotPasswordDialog } from '@/components/ForgotPasswordDialog';
@@ -23,6 +24,12 @@ export default function Login() {
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [idioma, setIdioma] = useState('pt-BR');
   const [rememberCredentials, setRememberCredentials] = useState(false);
+  const [canRegisterFirst, setCanRegisterFirst] = useState<boolean | null>(null);
+  const [registerOpen, setRegisterOpen] = useState(false);
+  const [regNome, setRegNome] = useState('');
+  const [regEmail, setRegEmail] = useState('');
+  const [regSenha, setRegSenha] = useState('');
+  const [regLoading, setRegLoading] = useState(false);
 
   const usuarioRef = useRef<HTMLInputElement | null>(null);
   const senhaRef = useRef<HTMLInputElement | null>(null);
@@ -61,6 +68,58 @@ export default function Login() {
       }
     } catch {}
   }, []);
+
+  useEffect(() => {
+    const check = async () => {
+      try {
+        const res = await fetch('/api/auth/first-user');
+        const data = await res.json();
+        setCanRegisterFirst(data.hasUsers === false);
+      } catch {
+        setCanRegisterFirst(true);
+      }
+    };
+    check();
+  }, [registerOpen]);
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!regNome.trim() || !regEmail.trim() || !regSenha) {
+      toast({ title: t('login.registerError'), description: t('login.registerFieldsRequired'), variant: 'destructive' });
+      return;
+    }
+    if (regSenha.length < 8) {
+      toast({ title: t('login.registerError'), description: t('login.registerPasswordMin'), variant: 'destructive' });
+      return;
+    }
+    setRegLoading(true);
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome: regNome.trim(), email: regEmail.trim(), senha: regSenha }),
+      });
+      let data: { detail?: string; error?: string } = {};
+      try {
+        data = await res.json();
+      } catch {
+        /* resposta não-JSON (ex: HTML de erro) */
+      }
+      if (!res.ok) {
+        throw new Error(data.detail || data.error || res.statusText || t('login.registerError'));
+      }
+      toast({ title: t('login.registerSuccess'), description: t('login.registerSuccessDesc') });
+      setRegisterOpen(false);
+      setRegNome('');
+      setRegEmail('');
+      setRegSenha('');
+      setUsuario(regEmail.trim());
+    } catch (err: unknown) {
+      toast({ title: t('login.registerError'), description: (err as Error).message, variant: 'destructive' });
+    } finally {
+      setRegLoading(false);
+    }
+  };
 
   const handleIdiomaChange = (value: string) => {
     const locale = supportedLocales.includes(value as (typeof supportedLocales)[number]) ? value : 'pt-BR';
@@ -278,6 +337,19 @@ export default function Login() {
                     <span>{t('login.rememberWarning')}</span>
                   </div>
                   <p className="text-xs text-slate-500">{t('login.offlineHint')}</p>
+
+                  {canRegisterFirst === true && (
+                    <div className="pt-2 border-t border-slate-200">
+                      <button
+                        type="button"
+                        onClick={() => setRegisterOpen(true)}
+                        className="flex items-center justify-center gap-2 w-full py-2 text-sm text-primary hover:underline font-medium"
+                      >
+                        <UserPlus className="h-4 w-4" />
+                        {t('login.registerFirstUser')}
+                      </button>
+                    </div>
+                  )}
                 </CardContent>
 
                 <CardFooter className="flex flex-col gap-3 pt-0">
@@ -296,6 +368,57 @@ export default function Login() {
       </div>
 
       <ForgotPasswordDialog open={forgotPasswordOpen} onOpenChange={setForgotPasswordOpen} />
+
+      <Dialog open={registerOpen} onOpenChange={setRegisterOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('login.registerTitle')}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleRegister} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="reg-nome">{t('login.registerName')}</Label>
+              <Input
+                id="reg-nome"
+                value={regNome}
+                onChange={(e) => setRegNome(e.target.value)}
+                placeholder={t('login.registerNamePlaceholder')}
+                autoComplete="name"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="reg-email">{t('login.registerEmail')}</Label>
+              <Input
+                id="reg-email"
+                type="email"
+                value={regEmail}
+                onChange={(e) => setRegEmail(e.target.value)}
+                placeholder={t('login.registerEmailPlaceholder')}
+                autoComplete="email"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="reg-senha">{t('login.registerPassword')}</Label>
+              <Input
+                id="reg-senha"
+                type="password"
+                value={regSenha}
+                onChange={(e) => setRegSenha(e.target.value)}
+                placeholder={t('login.registerPasswordPlaceholder')}
+                autoComplete="new-password"
+                minLength={8}
+              />
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setRegisterOpen(false)} disabled={regLoading}>
+                {t('common.cancel')}
+              </Button>
+              <Button type="submit" disabled={regLoading}>
+                {regLoading ? t('login.registerSending') : t('login.registerSubmit')}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

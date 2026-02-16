@@ -110,7 +110,8 @@ export async function login(email: string, senha: string) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || "Erro ao fazer login");
+      const detail = data.detail ? ` (${data.detail})` : "";
+      throw new Error((data.error || "Erro ao fazer login") + detail);
     }
 
     // Salva sessão automaticamente (normaliza perfil: só ADMINISTRADOR ou COLETISTA)
