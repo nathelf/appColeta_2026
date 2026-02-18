@@ -39,7 +39,7 @@ const connectionErrorHint = (err) => {
     msg.includes("getaddrinfo")
   ) {
     return process.env.VERCEL
-      ? "Não foi possível conectar ao banco. No Vercel: Settings → Environment Variables → confira DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, DB_SSL. Depois faça um novo deploy."
+      ? "Use DATABASE_URL com a URI do pooler do Supabase (Project Settings → Database → Connection string → Use connection pooling). Depois faça um novo deploy."
       : "Verifique o .env em appcoleta-backend (DB_HOST, DB_PASSWORD, DB_SSL=true) e se o backend está rodando.";
   }
   return null;
@@ -50,6 +50,7 @@ const connectionErrorHint = (err) => {
 ===================================================== */
 
 log("config", "App carregado. VERCEL:", !!process.env.VERCEL);
+log("config", "DATABASE_URL:", process.env.DATABASE_URL ? "definido" : "(não definido)");
 log("config", "DB_HOST:", process.env.DB_HOST ? `${process.env.DB_HOST.slice(0, 15)}...` : "(não definido)");
 log("config", "DB_PORT:", process.env.DB_PORT);
 log("config", "DB_USER:", process.env.DB_USER || "(não definido)");
@@ -57,14 +58,22 @@ log("config", "DB_NAME:", process.env.DB_NAME || "(não definido)");
 log("config", "DB_SSL:", process.env.DB_SSL);
 log("config", "JWT_SECRET:", process.env.JWT_SECRET ? "definido" : "(não definido)");
 
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  user: process.env.DB_USER,
-  password: String(process.env.DB_PASSWORD || ""),
-  database: process.env.DB_NAME,
-  ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
-});
+// Na Vercel, usar DATABASE_URL (pooler Supabase) evita ENOTFOUND. Senão usa DB_*.
+const poolConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    }
+  : {
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      user: process.env.DB_USER,
+      password: String(process.env.DB_PASSWORD || ""),
+      database: process.env.DB_NAME,
+      ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
+    };
+
+const pool = new Pool(poolConfig);
 
 pool.on("error", (err) => log("db-pool", "Pool error:", err.message));
 
