@@ -25,4 +25,12 @@ wrapper.use((req, res, next) => {
 });
 wrapper.use(mainApp);
 
+wrapper.use((err, _req, res, _next) => {
+  log("vercel-error", "Erro não tratado:", err?.message || err);
+  if (err?.stack) log("vercel-error", "Stack:", err.stack);
+  if (!res.headersSent) {
+    res.status(500).json({ error: "Internal Server Error", detail: err?.message || String(err) });
+  }
+});
+
 export default wrapper;

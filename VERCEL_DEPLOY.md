@@ -1,24 +1,33 @@
 # Deploy no Vercel com Supabase
 
-## 1. Pré-requisitos
+## 1. Pré-requisitos e checklist
 
-- Conta no [Vercel](https://vercel.com) e no [Supabase](https://supabase.com)
-- Repositório no GitHub (ou GitLab/Bitbucket) com o código do projeto
-- Banco Supabase configurado (schema executado via `supabase-schema.sql`)
+- [ ] Conta no [Vercel](https://vercel.com) e no [Supabase](https://supabase.com)
+- [ ] Repositório no GitHub (ou GitLab/Bitbucket) com o código do projeto
+- [ ] **Schema no Supabase**: executou `appcoleta-backend/scripts/supabase-schema.sql` no SQL Editor do projeto
+- [ ] **Admin no banco**: rodou `node scripts/seedAdmin.js` no backend (com .env do Supabase) para criar o primeiro usuário
+- [ ] Variáveis de ambiente do backend configuradas no Vercel (seção 2)
 
 ## 2. Variáveis de ambiente no Vercel
 
-No [Dashboard Vercel](https://vercel.com/dashboard) → seu projeto → **Settings** → **Environment Variables**, adicione:
+No [Dashboard Vercel](https://vercel.com/dashboard) → seu projeto → **Settings** → **Environment Variables**, adicione (marque **Production** e **Preview**):
 
-| Variável      | Valor                             | Ambiente   |
-|---------------|-----------------------------------|------------|
-| `DB_HOST`     | `db.slrrphmdnnjzmkaaxscv.supabase.co` | Production, Preview |
-| `DB_PORT`     | `5432`                            | Production, Preview |
-| `DB_USER`     | `postgres`                        | Production, Preview |
-| `DB_PASSWORD` | *sua senha do Supabase*           | Production, Preview |
-| `DB_NAME`     | `postgres`                        | Production, Preview |
-| `DB_SSL`      | `true`                            | Production, Preview |
-| `JWT_SECRET`  | *string secreta aleatória (ex: use um gerador)* | Production, Preview |
+| Variável      | Valor                             |
+|---------------|-----------------------------------|
+| `DB_HOST`     | `db.slrrphmdnnjzmkaaxscv.supabase.co` |
+| `DB_PORT`     | `5432`                            |
+| `DB_USER`     | `postgres`                        |
+| `DB_PASSWORD` | A mesma senha do Supabase (ex: `@Senha@2025@` — use aspas no valor se tiver `@`) |
+| `DB_NAME`     | `postgres`                        |
+| `DB_SSL`      | `true`                            |
+| `JWT_SECRET`  | Uma string secreta forte (ex: gere em [randomkeygen.com](https://randomkeygen.com)) |
+
+Opcional (para o cliente Supabase no frontend):
+
+| Variável                   | Valor |
+|----------------------------|--------|
+| `VITE_SUPABASE_URL`        | `https://slrrphmdnnjzmkaaxscv.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY`   | Sua chave anon (JWT longa do Supabase → API) |
 
 ## 3. Deploy
 

@@ -245,6 +245,22 @@ const App = () => {
                 }
               />
 
+              {/* /api/* acessado como página (não é rota da SPA) */}
+              <Route
+                path="/api/*"
+                element={
+                  <div className="flex min-h-screen items-center justify-center bg-muted p-4 text-center">
+                    <div>
+                      <p className="font-medium">Rota da API</p>
+                      <p className="mt-2 text-sm text-muted-foreground">
+                        Endpoints como <code>/api/health</code> devem ser chamados via fetch ou abertos na URL do backend (ex.: <code>localhost:3001/api/health</code>).
+                      </p>
+                      <a href="/" className="mt-4 inline-block text-primary underline">Voltar ao início</a>
+                    </div>
+                  </div>
+                }
+              />
+
               {/* 404 */}
               <Route
                 path="*"

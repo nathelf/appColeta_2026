@@ -7,7 +7,9 @@ const NotFound = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    // Não logar como erro rotas da API (/api/*) — são endpoints, não páginas
+    if (location.pathname.startsWith("/api")) return;
+    console.warn("404: Rota não encontrada:", location.pathname);
   }, [location.pathname]);
 
   return (

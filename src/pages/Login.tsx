@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Lock, Eye, EyeOff, Mail, ShieldCheck, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { validateLogin, login, setAuthUser } from '@/lib/auth';
@@ -78,6 +78,11 @@ export default function Login() {
           data = await res.json();
         } catch {
           console.warn('[Login] first-user: resposta não-JSON. Status:', res.status, 'URL:', res.url);
+          toast({
+            title: 'API indisponível',
+            description: 'O backend pode não estar rodando. Inicie com: npm run dev:backend (em outro terminal)',
+            variant: 'destructive',
+          });
           setCanRegisterFirst(true);
           return;
         }
@@ -111,7 +116,11 @@ export default function Login() {
       try {
         data = await res.json();
       } catch {
-        /* resposta não-JSON (ex: HTML de erro) */
+        /* resposta não-JSON: backend não rodando ou erro não tratado */
+        const msg = res.status === 500
+          ? 'Erro no servidor. Verifique se o backend está rodando (npm run dev:backend).'
+          : t('login.registerError');
+        throw new Error(msg);
       }
       if (!res.ok) {
         throw new Error(data.detail || data.error || res.statusText || t('login.registerError'));
@@ -378,9 +387,12 @@ export default function Login() {
       <ForgotPasswordDialog open={forgotPasswordOpen} onOpenChange={setForgotPasswordOpen} />
 
       <Dialog open={registerOpen} onOpenChange={setRegisterOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md" aria-describedby="register-dialog-desc">
           <DialogHeader>
             <DialogTitle>{t('login.registerTitle')}</DialogTitle>
+            <DialogDescription id="register-dialog-desc">
+              {t('login.registerTitleDesc')}
+            </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="space-y-2">

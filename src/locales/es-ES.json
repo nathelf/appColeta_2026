@@ -69,6 +69,7 @@
     "successDescription": "Bienvenido(a), {{name}}!",
     "registerFirstUser": "Registrar primer usuario",
     "registerTitle": "Registrar primer usuario",
+    "registerTitleDesc": "Complete los datos para crear el primer usuario administrador.",
     "registerName": "Nombre",
     "registerNamePlaceholder": "Su nombre completo",
     "registerEmail": "Correo electrónico",

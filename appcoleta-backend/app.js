@@ -1,18 +1,21 @@
 /**
  * Express app (API apenas) - usado tanto no server.js local quanto no Vercel serverless
- * Carrega .env localmente; no Vercel usa variáveis de ambiente já injetadas
+ * Carrega .env da pasta do backend; no Vercel usa variáveis de ambiente já injetadas
  */
-import "dotenv/config";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, ".env") });
+
 import express from "express";
 import cors from "cors";
 import pkg from "pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import path from "path";
-import { fileURLToPath } from "url";
 import crypto from "crypto";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const { Pool } = pkg;
 
 const log = (tag, ...args) => {
@@ -279,6 +282,13 @@ app.get("/api/sync/pull", async (req, res) => {
   } catch (err) {
     res.status(500).json({ ok: false, error: "Erro ao sincronizar", message: err.message });
   }
+});
+
+// Handler global: garante que sempre retornamos JSON em erros não tratados
+app.use((err, _req, res, _next) => {
+  logError("unhandled", err);
+  if (res.headersSent) return;
+  res.status(500).json({ error: "Internal Server Error", detail: err?.message || String(err) });
 });
 
 export default app;
