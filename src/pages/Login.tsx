@@ -112,7 +112,7 @@ export default function Login() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome: regNome.trim(), email: regEmail.trim(), senha: regSenha }),
       });
-      let data: { detail?: string; error?: string } = {};
+      let data: { detail?: string; error?: string; hint?: string } = {};
       try {
         data = await res.json();
       } catch {
@@ -123,7 +123,8 @@ export default function Login() {
         throw new Error(msg);
       }
       if (!res.ok) {
-        throw new Error(data.detail || data.error || res.statusText || t('login.registerError'));
+        const msg = [data.detail || data.error || res.statusText, data.hint].filter(Boolean).join(' — ') || t('login.registerError');
+        throw new Error(msg);
       }
       toast({ title: t('login.registerSuccess'), description: t('login.registerSuccessDesc') });
       setRegisterOpen(false);

@@ -71,6 +71,12 @@ Em **Settings → Domains** do projeto, adicione um domínio customizado.
 
 ## 7. Solução de problemas
 
+**"getaddrinfo ENOTFOUND db.xxx.supabase.co" ou "Erro ao cadastrar" na Vercel**
+- As variáveis de ambiente **precisam estar configuradas no Vercel** (não só no `.env` local).  
+  **Settings → Environment Variables** do projeto: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `DB_SSL`, `JWT_SECRET`.
+- Marque **Production** e **Preview** para cada variável.
+- **Faça um novo deploy** depois de salvar as variáveis (Deployments → ⋮ no último deploy → Redeploy).
+
 **Erro de conexão com o banco**
 - Confirme se o Supabase permite conexões externas (geralmente sim)
 - Verifique se `DB_SSL=true`
@@ -80,5 +86,5 @@ Em **Settings → Domains** do projeto, adicione um domínio customizado.
 - Revise as variáveis de ambiente
 
 **Login não funciona**
-- Confirme se executou `seedAdmin.js` no Supabase
+- Confirme se executou `seedAdmin.js` no Supabase (ou cadastrou o primeiro usuário pelo modal)
 - Verifique se o email/senha correspondem aos dados no banco

@@ -28,6 +28,23 @@ const logError = (tag, err) => {
   if (err?.stack) log(tag, "Stack:", err.stack);
 };
 
+/** Dica para erros de conexão (ex.: ENOTFOUND na Vercel) */
+const connectionErrorHint = (err) => {
+  const msg = (err?.message || String(err)).toLowerCase();
+  const code = err?.code || "";
+  if (
+    code === "ENOTFOUND" ||
+    code === "ECONNREFUSED" ||
+    code === "ETIMEDOUT" ||
+    msg.includes("getaddrinfo")
+  ) {
+    return process.env.VERCEL
+      ? "Não foi possível conectar ao banco. No Vercel: Settings → Environment Variables → confira DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, DB_SSL. Depois faça um novo deploy."
+      : "Verifique o .env em appcoleta-backend (DB_HOST, DB_PASSWORD, DB_SSL=true) e se o backend está rodando.";
+  }
+  return null;
+};
+
 /* =====================================================
    🗃️ DATABASE
 ===================================================== */
@@ -166,10 +183,11 @@ app.get("/api/auth/first-user", async (_, res) => {
     res.json({ hasUsers, count });
   } catch (err) {
     logError("first-user", err);
+    const hint = connectionErrorHint(err) || "Tabela usuarios pode não existir. Execute o script SQL no Supabase.";
     res.status(500).json({
       hasUsers: false,
-      error: err.message,
-      hint: "Tabela usuarios pode não existir. Execute o script SQL no Supabase.",
+      error: err?.message || String(err),
+      hint,
     });
   }
 });
@@ -202,7 +220,12 @@ app.post("/api/auth/register", async (req, res) => {
   } catch (err) {
     const msg = err?.message || String(err);
     logError("register", err);
-    res.status(500).json({ error: "Erro ao cadastrar", detail: msg });
+    const hint = connectionErrorHint(err);
+    res.status(500).json({
+      error: "Erro ao cadastrar",
+      detail: msg,
+      ...(hint && { hint }),
+    });
   }
 });
 
