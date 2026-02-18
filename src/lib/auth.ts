@@ -113,7 +113,8 @@ export async function login(email: string, senha: string) {
 
     if (!response.ok) {
       const detail = data.detail ? ` ${data.detail}` : "";
-      const statusHint = response.status === 404 ? " Rota não encontrada - verifique rewrites do Vercel." : "";
+      // 404 com JSON válido (ex: "Usuário não encontrado") vem da nossa API; 404 sem JSON indica rota não encontrada
+      const statusHint = response.status === 404 && !data.error ? " Rota não encontrada - verifique rewrites do Vercel." : "";
       throw new Error((data.error || `Erro HTTP ${response.status}`) + detail + statusHint);
     }
 

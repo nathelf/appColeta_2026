@@ -356,7 +356,13 @@ export default function Login() {
                   </div>
                   <p className="text-xs text-slate-500">{t('login.offlineHint')}</p>
 
-                  {canRegisterFirst === true && (
+                  {typeof window !== 'undefined' && !/localhost|127\.0\.0\.1/.test(window.location.hostname) && (
+                    <p className="text-xs text-slate-600 bg-slate-100 rounded-lg px-3 py-2">
+                      <strong>Modo teste:</strong> admin@appcoleta.com / admin123
+                    </p>
+                  )}
+
+                  {(canRegisterFirst === true || (typeof window !== 'undefined' && !/localhost|127\.0\.0\.1/.test(window.location.hostname))) && (
                     <div className="pt-2 border-t border-slate-200">
                       <button
                         type="button"
