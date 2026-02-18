@@ -49,33 +49,70 @@ const connectionErrorHint = (err) => {
    🗃️ DATABASE
 ===================================================== */
 
+const USE_MEMORY_DB =
+  process.env.USE_MEMORY_DB === "true" ||
+  (!process.env.DATABASE_URL && !process.env.DB_HOST);
+
 log("config", "App carregado. VERCEL:", !!process.env.VERCEL);
+log("config", "USE_MEMORY_DB:", USE_MEMORY_DB);
 log("config", "DATABASE_URL:", process.env.DATABASE_URL ? "definido" : "(não definido)");
 log("config", "DB_HOST:", process.env.DB_HOST ? `${process.env.DB_HOST.slice(0, 15)}...` : "(não definido)");
-log("config", "DB_PORT:", process.env.DB_PORT);
-log("config", "DB_USER:", process.env.DB_USER || "(não definido)");
-log("config", "DB_NAME:", process.env.DB_NAME || "(não definido)");
-log("config", "DB_SSL:", process.env.DB_SSL);
 log("config", "JWT_SECRET:", process.env.JWT_SECRET ? "definido" : "(não definido)");
 
-// Na Vercel, usar DATABASE_URL (pooler Supabase) evita ENOTFOUND. Senão usa DB_*.
-const poolConfig = process.env.DATABASE_URL
-  ? {
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
-    }
-  : {
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      user: process.env.DB_USER,
-      password: String(process.env.DB_PASSWORD || ""),
-      database: process.env.DB_NAME,
-      ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
-    };
+let pool = null;
+if (!USE_MEMORY_DB) {
+  const poolConfig = process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+      }
+    : {
+        host: process.env.DB_HOST,
+        port: Number(process.env.DB_PORT),
+        user: process.env.DB_USER,
+        password: String(process.env.DB_PASSWORD || ""),
+        database: process.env.DB_NAME,
+        ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
+      };
+  pool = new Pool(poolConfig);
+  pool.on("error", (err) => log("db-pool", "Pool error:", err.message));
+}
 
-const pool = new Pool(poolConfig);
+/* ========== MEMORY DB (sem Postgres - para testar deploy) ========== */
+const memoryStore = {
+  usuarios: [],
+  maes: [],
+  bebes: [],
+  scanners: [],
+  arquivos_referencia: [],
+  sessoes_coleta: [],
+  dedos_coleta: [],
+  forms_coleta: [],
+  respostas_quali: [],
+  auditorias: [],
+  login_eventos: [],
+};
 
-pool.on("error", (err) => log("db-pool", "Pool error:", err.message));
+async function initMemoryDb() {
+  const senhaHash = await bcrypt.hash("admin123", 10);
+  memoryStore.usuarios = [
+    {
+      id: 1,
+      uuid: crypto.randomUUID(),
+      nome: "Admin Demo",
+      email: "admin@appcoleta.com",
+      senha: senhaHash,
+      perfil: "ADMINISTRADOR",
+      admin: true,
+      ativo: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
+  ];
+  log("config", "Memory DB inicializado. Login: admin@appcoleta.com / admin123");
+}
+
+const memoryDbReady = USE_MEMORY_DB ? initMemoryDb() : Promise.resolve();
 
 /* =====================================================
    🚀 APP
@@ -85,6 +122,11 @@ const app = express();
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
+
+app.use(async (req, res, next) => {
+  if (USE_MEMORY_DB) await memoryDbReady;
+  next();
+});
 
 /* =====================================================
    🔧 UTILS
@@ -144,6 +186,9 @@ const TABLE_CONFIG = {
 
 app.get("/api/health", async (_, res) => {
   try {
+    if (USE_MEMORY_DB) {
+      return res.json({ ok: true, databaseTime: new Date().toISOString(), mode: "memory" });
+    }
     log("health", "Testando conexão com o banco...");
     const r = await pool.query("SELECT NOW()");
     log("health", "Conexão OK. DB time:", r.rows[0].now);
@@ -156,25 +201,27 @@ app.get("/api/health", async (_, res) => {
 
 app.get("/api/health/detailed", async (_, res) => {
   const check = {
+    mode: USE_MEMORY_DB ? "memory" : "postgres",
     env: {
+      USE_MEMORY_DB,
       DB_HOST: !!process.env.DB_HOST,
-      DB_PORT: !!process.env.DB_PORT,
-      DB_USER: !!process.env.DB_USER,
-      DB_PASSWORD: !!process.env.DB_PASSWORD,
-      DB_NAME: !!process.env.DB_NAME,
-      DB_SSL: process.env.DB_SSL,
+      DATABASE_URL: !!process.env.DATABASE_URL,
       JWT_SECRET: !!process.env.JWT_SECRET,
     },
     database: null,
     usuariosCount: null,
   };
   try {
-    log("health/detailed", "Testando DB...");
-    const r = await pool.query("SELECT NOW()");
-    check.database = { ok: true, time: r.rows[0].now };
-    const countRes = await pool.query("SELECT COUNT(*) FROM usuarios");
-    check.usuariosCount = parseInt(countRes.rows[0].count, 10);
-    log("health/detailed", "OK. Usuários:", check.usuariosCount);
+    if (USE_MEMORY_DB) {
+      check.database = { ok: true, time: new Date().toISOString() };
+      check.usuariosCount = memoryStore.usuarios.length;
+    } else {
+      log("health/detailed", "Testando DB...");
+      const r = await pool.query("SELECT NOW()");
+      check.database = { ok: true, time: r.rows[0].now };
+      const countRes = await pool.query("SELECT COUNT(*) FROM usuarios");
+      check.usuariosCount = parseInt(countRes.rows[0].count, 10);
+    }
   } catch (e) {
     check.database = { ok: false, error: e.message };
     logError("health/detailed", e);
@@ -184,11 +231,14 @@ app.get("/api/health/detailed", async (_, res) => {
 
 app.get("/api/auth/first-user", async (_, res) => {
   try {
+    if (USE_MEMORY_DB) {
+      const count = memoryStore.usuarios.length;
+      return res.json({ hasUsers: count > 0, count });
+    }
     log("first-user", "Verificando se há usuários...");
     const r = await pool.query("SELECT COUNT(*) FROM usuarios");
     const count = parseInt(r.rows[0].count, 10);
     const hasUsers = count > 0;
-    log("first-user", "Count:", count, "hasUsers:", hasUsers);
     res.json({ hasUsers, count });
   } catch (err) {
     logError("first-user", err);
@@ -211,10 +261,32 @@ app.post("/api/auth/register", async (req, res) => {
       return res.status(400).json({ error: "Senha deve ter pelo menos 8 caracteres" });
     }
     log("register", "Tentando cadastrar primeiro usuário:", email);
+
+    if (USE_MEMORY_DB) {
+      if (memoryStore.usuarios.length > 0) {
+        return res.status(403).json({ error: "Já existem usuários. Use admin@appcoleta.com / admin123" });
+      }
+      const senhaHash = await bcrypt.hash(senha, 10);
+      const id = memoryStore.usuarios.length + 1;
+      const now = new Date().toISOString();
+      memoryStore.usuarios.push({
+        id,
+        uuid: crypto.randomUUID(),
+        nome: nome.trim(),
+        email: email.trim().toLowerCase(),
+        senha: senhaHash,
+        perfil: "ADMINISTRADOR",
+        admin: true,
+        ativo: true,
+        created_at: now,
+        updated_at: now,
+      });
+      return res.json({ ok: true, message: "Usuário cadastrado. Faça login." });
+    }
+
     const countRes = await pool.query("SELECT COUNT(*) FROM usuarios");
     const count = parseInt(countRes.rows[0].count, 10);
     if (count > 0) {
-      log("register", "Já existem usuários. Negado.");
       return res.status(403).json({ error: "Já existem usuários. Peça ao administrador para cadastrá-lo." });
     }
     const senhaHash = await bcrypt.hash(senha, 10);
@@ -245,14 +317,20 @@ app.post("/api/auth/login", async (req, res) => {
       return res.status(400).json({ error: "Email e senha são obrigatórios" });
     }
     log("login", "Tentativa de login:", email);
-    const result = await pool.query("SELECT * FROM usuarios WHERE LOWER(email)=LOWER($1)", [email]);
-    const user = result.rows[0];
+
+    let user;
+    if (USE_MEMORY_DB) {
+      user = memoryStore.usuarios.find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
+    } else {
+      const result = await pool.query("SELECT * FROM usuarios WHERE LOWER(email)=LOWER($1)", [email]);
+      user = result.rows[0];
+    }
+
     if (!user) {
       log("login", "Usuário não encontrado:", email);
       return res.status(404).json({ error: "Usuário não encontrado" });
     }
     if (!user.senha) {
-      log("login", "Usuário sem senha no banco:", email);
       return res.status(500).json({ error: "Usuário sem senha configurada. Contate o administrador." });
     }
     const senhaValida = await bcrypt.compare(senha, user.senha);
@@ -261,9 +339,9 @@ app.post("/api/auth/login", async (req, res) => {
       return res.status(401).json({ error: "Senha inválida" });
     }
     const token = jwt.sign({ id: user.id, email: user.email, admin: user.admin, perfil: user.perfil }, process.env.JWT_SECRET || "dev_secret", { expiresIn: "8h" });
-    delete user.senha;
+    const { senha: _, ...userSafe } = user;
     log("login", "Login OK:", email);
-    res.json({ usuario: user, token });
+    res.json({ usuario: userSafe, token });
   } catch (err) {
     const msg = err?.message || String(err);
     logError("login", err);
@@ -273,6 +351,21 @@ app.post("/api/auth/login", async (req, res) => {
     });
   }
 });
+
+function memoryUpsert(tableKey, data, conflictCol = "uuid") {
+  const arr = memoryStore[TABLE_CONFIG[tableKey]?.table];
+  if (!arr) return null;
+  const key = conflictCol === "email" ? "email" : "uuid";
+  const keyVal = data[key];
+  const idx = arr.findIndex((r) => (r[key] || "").toLowerCase() === (keyVal || "").toLowerCase());
+  const row = { id: (arr.length + 1), ...data };
+  if (idx >= 0) {
+    arr[idx] = { ...arr[idx], ...data };
+    return arr[idx];
+  }
+  arr.push(row);
+  return row;
+}
 
 app.post("/api/sync", async (req, res) => {
   const items = req.body.items || [];
@@ -288,9 +381,15 @@ app.post("/api/sync", async (req, res) => {
       data.senha = await bcrypt.hash("123456", 10);
     }
     try {
-      const { sql, values } = buildUpsert(cfg.table, data, cfg.conflict || ["uuid"]);
-      const r = await pool.query(sql, values);
-      results.push({ clientRef: item.clientRef, table: item.table, status: "ok", id: r.rows[0]?.id });
+      if (USE_MEMORY_DB) {
+        const conflict = cfg.conflict?.[0] || "uuid";
+        const row = memoryUpsert(item.table, data, conflict);
+        results.push({ clientRef: item.clientRef, table: item.table, status: "ok", id: row?.id });
+      } else {
+        const { sql, values } = buildUpsert(cfg.table, data, cfg.conflict || ["uuid"]);
+        const r = await pool.query(sql, values);
+        results.push({ clientRef: item.clientRef, table: item.table, status: "ok", id: r.rows[0]?.id });
+      }
     } catch (err) {
       results.push({ clientRef: item.clientRef, table: item.table, status: "error", error: err.message });
     }
@@ -301,13 +400,20 @@ app.post("/api/sync", async (req, res) => {
 app.get("/api/sync/pull", async (req, res) => {
   try {
     const data = {};
-    for (const [tableKey, cfg] of Object.entries(TABLE_CONFIG)) {
-      try {
-        const result = await pool.query(`SELECT * FROM ${cfg.table}`);
-        data[tableKey] = result.rows;
-      } catch (err) {
-        console.error(`Erro ao buscar ${tableKey}:`, err.message);
-        data[tableKey] = [];
+    if (USE_MEMORY_DB) {
+      for (const [tableKey, cfg] of Object.entries(TABLE_CONFIG)) {
+        const arr = memoryStore[cfg.table];
+        data[tableKey] = Array.isArray(arr) ? [...arr] : [];
+      }
+    } else {
+      for (const [tableKey, cfg] of Object.entries(TABLE_CONFIG)) {
+        try {
+          const result = await pool.query(`SELECT * FROM ${cfg.table}`);
+          data[tableKey] = result.rows;
+        } catch (err) {
+          console.error(`Erro ao buscar ${tableKey}:`, err.message);
+          data[tableKey] = [];
+        }
       }
     }
     res.json({ ok: true, timestamp: new Date().toISOString(), data });

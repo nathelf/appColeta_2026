@@ -2,11 +2,10 @@
 
 ## 1. Pré-requisitos e checklist
 
-- [ ] Conta no [Vercel](https://vercel.com) e no [Supabase](https://supabase.com)
+- [ ] Conta na [Vercel](https://vercel.com)
 - [ ] Repositório no GitHub (ou GitLab/Bitbucket) com o código do projeto
-- [ ] **Schema no Supabase**: executou `appcoleta-backend/scripts/supabase-schema.sql` no SQL Editor do projeto
-- [ ] **Admin no banco**: rodou `node scripts/seedAdmin.js` no backend (ou cadastre o primeiro usuário pelo modal no login)
-- [ ] **Variáveis na Vercel**: use o arquivo **[VERCEL_VARIAVEIS.md](./VERCEL_VARIAVEIS.md)** para copiar e colar cada variável no dashboard da Vercel
+- [ ] **Opção A – Sem banco (teste rápido):** use **[VERCEL_SEM_BANCO.md](./VERCEL_SEM_BANCO.md)** – só `USE_MEMORY_DB=true` e `JWT_SECRET`, login: `admin@appcoleta.com` / `admin123`
+- [ ] **Opção B – Com Supabase:** schema executado, variáveis em **[VERCEL_VARIAVEIS.md](./VERCEL_VARIAVEIS.md)**
 
 ## 2. Variáveis de ambiente no Vercel
 
